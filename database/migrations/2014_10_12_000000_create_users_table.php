@@ -19,9 +19,9 @@ class CreateUsersTable extends Migration
             $table->string('mobile', 13)->unique();
             $table->string('name', 100);
             $table->string('password', 128);
-            $table->string('avatar', 128);
-            $table->string('website', 128);
-            $table->string('verify_code', 6);
+            $table->string('avatar', 128)->nullable();
+            $table->string('website', 128)->nullable();
+            $table->string('verify_code', 6)->nullable();
             $table->timestamp('verified_at')->nullable();
             $table->timestamps();
         });
