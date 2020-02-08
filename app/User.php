@@ -14,6 +14,16 @@ class User extends Authenticatable
     use Notifiable;
 
     /**
+     * find and login the user through 1-email or 2-mobile
+     * @param $username
+     * @return mixed
+     */
+    public function findForPassport($username)
+    {
+        return static::where('mobile', $username)->orWhere('email', $username)->first();
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -40,3 +50,5 @@ class User extends Authenticatable
         'verified_at' => 'datetime',
     ];
 }
+
+
