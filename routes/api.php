@@ -11,6 +11,8 @@ Route::group(["namespace" => "\Laravel\Passport\Http\Controllers"], function ($r
     ]);
 });
 
+Route::post('register', 'AuthController@register')->name('register');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
