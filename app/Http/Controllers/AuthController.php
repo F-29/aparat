@@ -18,7 +18,7 @@ class AuthController extends Controller
         $type = $request->has('email') ? 'email' : 'mobile';
         $value = $request->input($type, 'email');
         // TODO: generating random code to send to registering user
-        $code = '123456';
+        $code = random_int(111111, 999999);
 
         Cache::put('user-auth-register-' . $value, compact('type', 'code'), config('auth.register_cache_expiration', 1440));
 
