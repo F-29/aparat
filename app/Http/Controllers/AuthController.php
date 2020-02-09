@@ -20,7 +20,6 @@ class AuthController extends Controller
         // TODO: generating random code to send to registering user
         $code = '123456';
 
-        // TODO: the cache expiration date most be set as a config value for more abstraction
         Cache::put('user-auth-register-' . $value, compact('type', 'code'), config('auth.register_cache_expiration', 1440));
 
         // TODO: sending message through email/mobile to the user for completing THE 'registration'
