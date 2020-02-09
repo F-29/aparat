@@ -18,7 +18,7 @@ class AuthController extends Controller
 
         // TODO: the cache expiration date most be set as a config value for more abstraction
         Cache::put('user-auth-register-' . $value, compact('type', 'code'), now()->addDay());
-        // adding register api route | creating a special request to handle registration validation | adding the auth controller and also adding the register functionality to it | fixing users table migration to be able to register users via either email or mobile
+
         // TODO: sending message through email/mobile to the user for completing THE 'registration'
         Log::info('SENDING-REGISTER-CODE-MESSAGE-TO-USER', ['code' => $code]);
         return response(['message' => 'کاربر با موفقیت ثبت موقت شد'], 200);
