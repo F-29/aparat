@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
+    /**
+     * @param RegisterNewUserRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function register(RegisterNewUserRequest $request)
     {
         $type = $request->has('email') ? 'email' : 'mobile';
