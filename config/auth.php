@@ -106,6 +106,8 @@ return [
         'refresh_token' => env('EXPIRATION_TOKEN', 43200),
     ],
 
+    'register_cache_expiration' => env('EXPIRATION_REGISTER_CACHE', 1440),
+
     /*
     |--------------------------------------------------------------------------
     | Password Confirmation Timeout
