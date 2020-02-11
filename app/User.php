@@ -24,6 +24,15 @@ class User extends Authenticatable
     }
 
     /**
+     * @param $value
+     */
+    public function setMobileAttribute($value)
+    {
+        $mobile = '+98' . substr($value, -10, 10);
+        $this->attributes['mobile'] = $mobile;
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

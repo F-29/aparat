@@ -64,7 +64,7 @@ class AuthController extends Controller
         ])->first();
 
         if (empty($user)) {
-            throw new ModelNotFoundException('کاربری یافت نشد');
+            throw new ModelNotFoundException('no user found or user have already been verified');
         }
 
         $user->verify_code = null;
