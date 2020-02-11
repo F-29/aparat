@@ -25,6 +25,12 @@ class AuthController extends Controller
         $type = $request->has('email') ? 'email' : 'mobile';
         $value = $request->input($type, 'email');
         $code = random_int(111111, 999999);
+        if ($user = User::where($type, $value)->first()) {
+            if ($user->verified_at) {
+                throw new UserAlreadyExistsException();
+            }
+            return response(['message' => 'verification code have already been sent'], 200);
+        }
         try {
             User::create([
                 'type' => User::TYPE_USER,
@@ -32,7 +38,7 @@ class AuthController extends Controller
                 $type => $value,
             ]);
         } catch (QueryException $e) {
-            throw new UserAlreadyExistsException($e);
+            ;
         }
 //        $expiration = config('auth.register_cache_expiration', 1440); // only with cache registration method
 
