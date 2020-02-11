@@ -37,8 +37,8 @@ class AuthController extends Controller
                 'verify_code' => $code,
                 $type => $value,
             ]);
-        } catch (QueryException $e) {
-            ;
+        } catch (Exception $e) {
+            throw new UserAlreadyExistsException($e);
         }
 //        $expiration = config('auth.register_cache_expiration', 1440); // only with cache registration method
 
@@ -55,12 +55,16 @@ class AuthController extends Controller
      */
     public function register_verify(RegisterVerifyUserRequest $request)
     {
+        $type = $request->has('email') ? 'email' : 'mobile';
         $code = $request->code;
 
-        $user = User::where('verify_code', $code)->first();
+        $user = User::where([
+            $type => $request->input($type),
+            'verify_code' => $code,
+        ])->first();
 
         if (empty($user)) {
-            throw new ModelNotFoundException('کاربری با کد مورد نظر یافت نشد');
+            throw new ModelNotFoundException('کاربری یافت نشد');
         }
 
         $user->verify_code = null;
