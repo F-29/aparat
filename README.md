@@ -15,8 +15,8 @@ You can :
 	- delete them.
 	- edit them.
 	- sub-categorize them.
-	- 
+	- ...
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Aparat is a open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
