@@ -22,8 +22,8 @@ class AuthController extends Controller
      */
     public function register(RegisterNewUserRequest $request)
     {
-        $type = $request->has('email') ? 'email' : 'mobile';
-        $value = $request->input($type, 'email');
+        $type = $request->getFieldName();
+        $value = $request->getFieldValue();
         $code = random_int(111111, 999999);
         if ($user = User::where($type, $value)->first()) {
             if ($user->verified_at) {
@@ -55,11 +55,11 @@ class AuthController extends Controller
      */
     public function register_verify(RegisterVerifyUserRequest $request)
     {
-        $type = $request->has('email') ? 'email' : 'mobile';
-        $code = $request->code;
+        $type = $request->getFieldName();
+        $code = $request->code();
 
         $user = User::where([
-            $type => $request->input($type),
+            $type => $request->getFieldValue(),
             'verify_code' => $code,
         ])->first();
 
