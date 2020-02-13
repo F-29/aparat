@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\UserAlreadyExistsException;
+use App\Exceptions\WrongVerifyCodeException;
 use App\Http\Requests\Auth\RegisterNewUserRequest;
 use App\Http\Requests\Auth\RegisterVerifyUserRequest;
 use App\User;
@@ -48,6 +49,8 @@ class AuthController extends Controller
      * @param RegisterVerifyUserRequest $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws UserAlreadyExistsException
+     * @throws WrongVerifyCodeException
+     * @throws ModelNotFoundException
      */
     public function register_verify(RegisterVerifyUserRequest $request)
     {
@@ -57,6 +60,10 @@ class AuthController extends Controller
         $user = User::where([
             $field => $request->getFieldValue(),
         ])->first();
+
+        if ($code !== $user->verify_code) {
+            throw new WrongVerifyCodeException();
+        }
 
         if (empty($user)) {
             throw new ModelNotFoundException('user have already been verified');
