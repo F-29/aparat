@@ -6,6 +6,27 @@
 Aparat is a social network for sharing clips, movies, and funny stuff and 
 as you know it already, it's FUN
 
+## it build with:
+- **React.js**
+- **Redux**
+- **Saga**
+- **Material UI**
+- **Axios**
+- **chart.js**
+- **chalk**
+- **connected-react-router**
+- **history**
+- **lodash**
+- **moment**
+- **prop-types**
+- **styled-components**
+- **React Upload Drop**
+- **Laravel** _Rest-API_ `6.2`
+- **Passport** `8.3`
+- **Ffmpeg**
+- **Mysql** `mariaDB`
+- 
+
 You can :
 - share videos and create a category for them or put it in an existing one.
 - comment those videos.
