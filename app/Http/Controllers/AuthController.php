@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\UserAlreadyExistsException;
 use App\Exceptions\WrongVerifyCodeException;
 use App\Http\Requests\Auth\RegisterNewUserRequest;
+use App\Http\Requests\Auth\RegisterVerifyResendRequest;
 use App\Http\Requests\Auth\RegisterVerifyUserRequest;
 use App\User;
 use Exception;
@@ -24,7 +25,7 @@ class AuthController extends Controller
     {
         $field = $request->getFieldName();
         $value = $request->getFieldValue();
-        $code = random_int(111111, 999999);
+        $code = random_verification_code();
         if ($user = User::where($field, $value)->first()) {
             if ($user->verified_at) {
                 throw new UserAlreadyExistsException();
@@ -79,5 +80,32 @@ class AuthController extends Controller
         $user->save();
 
         return response($user, 200);
+    }
+
+    public function register_verify_resend(RegisterVerifyResendRequest $request)
+    {
+        $field = $request->getFieldName();
+        $value = $request->getFieldValue();
+
+        $user = User::where($field, $value)->whereNull('verified_at')->first();
+
+        if (!empty($user)) {
+            $dateDiff = now()->diffInMinutes($user->updated_at);
+
+            // اگر زمان مورد نظر از ارسال کد قبلی گذشته بود مجددا کد جدید ایجاد و ارسال میکنیم
+            if ($dateDiff > config('auth.resend_verification_code_time_diff', 60)) {
+                $user->verify_code = random_verification_code();
+                $user->save();
+            }
+
+            //TODO: ارسال ایمیل یا پیامک به کاربر
+            Log::info('RESEND-REGISTER-CODE-MESSAGE-TO-USER', ['code' => $user->verify_code]);
+
+            return response([
+                'message' => 'verification code sent, please check your ' . $field === 'mobile' ? 'phone' : 'email'
+            ], 200);
+        }
+
+        throw new ModelNotFoundException('no user found');
     }
 }

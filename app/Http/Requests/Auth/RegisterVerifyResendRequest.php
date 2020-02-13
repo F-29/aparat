@@ -5,7 +5,7 @@ namespace App\Http\Requests\Auth;
 use App\Rules\MobileRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterVerifyUserRequest extends FormRequest
+class RegisterVerifyResendRequest extends FormRequest
 {
     use GetRegisterFieldAndValueTrait;
 
@@ -27,14 +27,8 @@ class RegisterVerifyUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required|string',
             'mobile' => ['required_without:email', 'string', new MobileRule()],
-            'email' => 'required_without:mobile|email'
+            'email' => 'required_without:mobile|email',
         ];
-    }
-
-    public function code()
-    {
-        return $this->code;
     }
 }

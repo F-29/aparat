@@ -103,10 +103,12 @@ return [
 
     'token_expiration' => [
         'token' => env('EXPIRATION_TOKEN', 14400),
-        'refresh_token' => env('EXPIRATION_TOKEN', 43200),
+        'refresh_token' => env('EXPIRATION_REFRESH_TOKEN', 43200),
     ],
 
     'register_cache_expiration' => env('EXPIRATION_REGISTER_CACHE', 1440),
+
+    'resend_verification_code_time_diff' => env('RESEND_VERIFICATION_CODE_TIME_DIFF', 60),
 
     /*
     |--------------------------------------------------------------------------

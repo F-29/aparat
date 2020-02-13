@@ -15,6 +15,8 @@ Route::post('register', 'AuthController@register')->name('register');
 
 Route::post('register-verify', 'AuthController@register_verify')->name('register-verify');
 
+Route::post('register-verify-resend', 'AuthController@register_verify_resend')->name('register-verify-resend');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

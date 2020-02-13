@@ -4,7 +4,7 @@
 namespace App\Http\Requests\Auth;
 
 
-trait GetRegisterTypeAndValueTrait
+trait GetRegisterFieldAndValueTrait
 {
     /**
      * @return string
