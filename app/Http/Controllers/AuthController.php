@@ -92,7 +92,15 @@ class AuthController extends Controller
         $field = $request->getFieldName();
         $value = $request->getFieldValue();
 
-        $user = User::where($field, $value)->whereNull('verified_at')->first();
+        $user = User::where($field, $value)->first();
+
+        if (empty($user)) {
+            throw new ModelNotFoundException('no user found');
+        }
+
+        if ($user->verified_at) {
+            throw new ModelNotFoundException('user have already been verified');
+        }
 
         if (!empty($user)) {
             $dateDiff = now()->diffInMinutes($user->updated_at);
@@ -106,10 +114,8 @@ class AuthController extends Controller
             Log::info('RESEND-REGISTER-CODE-MESSAGE-TO-USER', ['code' => $user->verify_code]);
 
             return response([
-                'message' => 'verification code sent'
+                'message' => 'verification code sent, please check your ' . ($field === 'mobile' ? 'phone' : 'email')
             ], 200);
         }
-
-        throw new ModelNotFoundException('no user found');
     }
 }
