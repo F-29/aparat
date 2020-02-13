@@ -3,8 +3,7 @@
 
 ## About Aparat
 
-Aparat is a social network for sharing clips, movies, and funny stuff and 
-as you know it already, it's FUN
+Aparat is a social network for sharing clips, movies, and funny stuff
 
 ## it build with:
 - **React.js**
@@ -25,9 +24,8 @@ as you know it already, it's FUN
 - **Passport** `8.3`
 - **Ffmpeg**
 - **Mysql** `mariaDB`
-- 
 
-You can :
+###You can :
 - share videos and create a category for them or put it in an existing one.
 - comment those videos.
 - like them.
