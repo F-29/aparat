@@ -82,6 +82,11 @@ class AuthController extends Controller
         return response($user, 200);
     }
 
+    /**
+     * @param RegisterVerifyResendRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws Exception
+     */
     public function register_verify_resend(RegisterVerifyResendRequest $request)
     {
         $field = $request->getFieldName();
@@ -92,17 +97,16 @@ class AuthController extends Controller
         if (!empty($user)) {
             $dateDiff = now()->diffInMinutes($user->updated_at);
 
-            // اگر زمان مورد نظر از ارسال کد قبلی گذشته بود مجددا کد جدید ایجاد و ارسال میکنیم
             if ($dateDiff > config('auth.resend_verification_code_time_diff', 60)) {
                 $user->verify_code = random_verification_code();
                 $user->save();
             }
 
-            //TODO: ارسال ایمیل یا پیامک به کاربر
+            // TODO: sending message through email/mobile to the user
             Log::info('RESEND-REGISTER-CODE-MESSAGE-TO-USER', ['code' => $user->verify_code]);
 
             return response([
-                'message' => 'verification code sent, please check your ' . $field === 'mobile' ? 'phone' : 'email'
+                'message' => 'verification code sent'
             ], 200);
         }
 
