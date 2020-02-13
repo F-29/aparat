@@ -26,6 +26,6 @@ class UserAlreadyExistsException extends Exception
      */
     public function render($request)
     {
-        return response(['message' => 'user already exists', 'stack' => $this->getMessage()], 400);
+        return response(['message' => 'user already exists'], 400);
     }
 }

@@ -21,10 +21,10 @@ class AuthController extends Controller
      */
     public function register(RegisterNewUserRequest $request)
     {
-        $type = $request->getFieldName();
+        $field = $request->getFieldName();
         $value = $request->getFieldValue();
         $code = random_int(111111, 999999);
-        if ($user = User::where($type, $value)->first()) {
+        if ($user = User::where($field, $value)->first()) {
             if ($user->verified_at) {
                 throw new UserAlreadyExistsException();
             }
@@ -34,7 +34,7 @@ class AuthController extends Controller
             User::create([
                 'type' => User::TYPE_USER,
                 'verify_code' => $code,
-                $type => $value,
+                $field => $value,
             ]);
         } catch (Exception $e) {
             throw new UserAlreadyExistsException($e);
@@ -47,20 +47,25 @@ class AuthController extends Controller
     /**
      * @param RegisterVerifyUserRequest $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws UserAlreadyExistsException
      */
     public function register_verify(RegisterVerifyUserRequest $request)
     {
-        $type = $request->getFieldName();
+        $field = $request->getFieldName();
         $code = $request->code();
 
         $user = User::where([
-            $type => $request->getFieldValue(),
-            'verify_code' => $code,
+            $field => $request->getFieldValue(),
         ])->first();
 
         if (empty($user)) {
-            throw new ModelNotFoundException('no user found or user have already been verified');
+            throw new ModelNotFoundException('user have already been verified');
         }
+
+        if (!empty($user->verified_at)) {
+            throw new UserAlreadyExistsException('user already exists');
+        }
+
 
         $user->verify_code = null;
         $user->verified_at = now();
