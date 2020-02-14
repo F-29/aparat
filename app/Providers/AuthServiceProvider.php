@@ -28,7 +28,7 @@ class AuthServiceProvider extends ServiceProvider
 
 //        Passport::routes();
 
-        Passport::tokensExpireIn(now()->addMinutes(config('api.token_expiration.token')));
-        Passport::refreshTokensExpireIn(now()->addMinutes(config('api.token_expiration.refresh_token')));
+        Passport::tokensExpireIn(now()->addMinutes(config('auth.token_expiration.token')));
+        Passport::refreshTokensExpireIn(now()->addMinutes(config('auth.token_expiration.refresh_token')));
     }
 }

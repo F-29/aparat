@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::group(["namespace" => "\Laravel\Passport\Http\Controllers"], function ($router) {
@@ -11,12 +10,29 @@ Route::group(["namespace" => "\Laravel\Passport\Http\Controllers"], function ($r
     ]);
 });
 
-Route::post('register', 'AuthController@register')->name('register');
+Route::post('register', [
+    'as' => 'register',
+    'uses' => 'AuthController@register'
+]);
 
-Route::post('register-verify', 'AuthController@register_verify')->name('register-verify');
+Route::post('register-verify', [
+    'as' => 'register-verify',
+    'uses' => 'AuthController@register_verify'
+]);
 
-Route::post('register-verify-resend', 'AuthController@register_verify_resend')->name('register-verify-resend');
+Route::post('register-verify-resend', [
+    'as' => 'register-verify-resend',
+    'uses' => 'AuthController@register_verify_resend'
+]);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('change-email', [
+    'middleware' => ['auth:api'],
+    'as' => 'change.email',
+    'uses' => 'UserController@changeEmail'
+]);
+
+Route::post('change-email-submit', [
+    'middleware' => ['auth:api'],
+    'as' => 'change.email.submit',
+    'uses' => 'UserController@changeEmailSubmit'
+]);

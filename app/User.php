@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -11,7 +12,8 @@ class User extends Authenticatable
     const TYPE_USER = 'user';
     const TYPE_ADMIN = 'admin';
     const TYPES = [self::TYPE_ADMIN, self::TYPE_USER];
-    use Notifiable;
+
+    use HasApiTokens, Notifiable;
 
     /**
      * find and login the user through 1-email or 2-mobile
