@@ -32,6 +32,10 @@ class UserController extends Controller
         ], 200);
     }
 
+    /**
+     * @param ChangeEmailSubmitRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function changeEmailSubmit(ChangeEmailSubmitRequest $request)
     {
         $userID = auth()->id();
