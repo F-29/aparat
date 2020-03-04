@@ -12,7 +12,9 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 //use Illuminate\Support\Facades\Cache; // only with cache registration method
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -23,27 +25,40 @@ class AuthController extends Controller
      */
     public function register(RegisterNewUserRequest $request)
     {
-        $field = $request->getFieldName();
-        $value = $request->getFieldValue();
-        $code = random_verification_code();
-        if ($user = User::where($field, $value)->first()) {
-            if ($user->verified_at) {
-                throw new UserAlreadyExistsException();
-            }
-            return response(['message' => 'verification code have already been sent'], 200);
-        }
         try {
-            User::create([
+            DB::beginTransaction();
+            $field = $request->getFieldName();
+            $value = $request->getFieldValue();
+            $code = random_verification_code();
+            if ($user = User::where($field, $value)->first()) {
+                if ($user->verified_at) {
+                    throw new UserAlreadyExistsException();
+                }
+                return response(['message' => 'verification code have already been sent'], 200);
+            }
+
+            $user = User::create([
                 'type' => User::TYPE_USER,
                 'verify_code' => $code,
                 $field => $value,
             ]);
-        } catch (Exception $e) {
-            throw new UserAlreadyExistsException($e);
+
+            $channelDefaultName = $field === 'mobile' ? Str::after($value, "+98") : Str::before($value, "@");
+            $user->channel()->create(['name' => $channelDefaultName]);
+
+            // TODO: sending message through email/mobile to the user for completing THE 'registration'
+            Log::info('SENDING-REGISTER-CODE-MESSAGE-TO-USER', ['code' => $code]);
+
+            DB::commit();
+            return response(['message' => 'کاربر با موفقیت ثبت موقت شد', 'code' => $code], 200);
+
+        } catch (Exception $exception) {
+            Log::error('exception on registering user: ' . $exception);
+            DB::rollBack();
+            dd($exception);
+            return response(['message' => 'Error in registration process'], 500);
         }
-        // TODO: sending message through email/mobile to the user for completing THE 'registration'
-        Log::info('SENDING-REGISTER-CODE-MESSAGE-TO-USER', ['code' => $code]);
-        return response(['message' => 'کاربر با موفقیت ثبت موقت شد', 'code' => $code], 200);
+
     }
 
     /**

@@ -34,6 +34,15 @@ class User extends Authenticatable
     }
 
     /**
+     * oneToMany relationship
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function channel()
+    {
+        return $this->hasOne(channel::class);
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
