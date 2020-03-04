@@ -43,9 +43,6 @@ class AuthController extends Controller
                 $field => $value,
             ]);
 
-            $channelDefaultName = $field === 'mobile' ? Str::after($value, "+98") : Str::before($value, "@");
-            $user->channel()->create(['name' => $channelDefaultName]);
-
             // TODO: sending message through email/mobile to the user for completing THE 'registration'
             Log::info('SENDING-REGISTER-CODE-MESSAGE-TO-USER', ['code' => $code]);
 
