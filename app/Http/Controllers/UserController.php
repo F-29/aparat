@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\ChangeEmailRequest;
 use App\Http\Requests\User\ChangeEmailSubmitRequest;
+use App\Http\Services\UserEmailService;
 use App\User;
 use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
-    const EMAIL_CHANGE_CACHE_KEY = 'change.email.for.';
 
     /**
      * @param ChangeEmailRequest $request
@@ -18,12 +18,7 @@ class UserController extends Controller
      */
     public function changeEmail(ChangeEmailRequest $request)
     {
-        $email = $request->email;
-        $userID = auth()->id();
-        $code = random_verification_code();
-        $expirationDate = now()->addMinutes(config('auth.change_email_cache_expiration', 1440));
-
-        Cache::put(self::EMAIL_CHANGE_CACHE_KEY . $userID, compact('email', 'code'), $expirationDate);
+        $code = UserEmailService::ChangeEmailService($request);
 
         // TODO: sending email to the user's new email address (for now we send the code in the response)
         return response([
@@ -38,20 +33,7 @@ class UserController extends Controller
      */
     public function changeEmailSubmit(ChangeEmailSubmitRequest $request)
     {
-        $userID = auth()->id();
-        $cacheKey = self::EMAIL_CHANGE_CACHE_KEY . $userID;
-        $cache = Cache::get($cacheKey);
-        if (empty($cache) || $cache['code'] != $request->code) {
-            dd($cache, $request->all());
-            return response([
-                'message' => 'wrong inputs or bad request'
-            ], 400);
-        }
-
-        $user = auth()->user();
-        $user->email = $cache['email'];
-        $user->save();
-        Cache::forget($cacheKey);
+        UserEmailService::ChangeEmailSubmitService($request);
 
         return response([
             'message'=> 'email changed successfully!'
