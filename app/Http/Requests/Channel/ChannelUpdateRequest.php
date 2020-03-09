@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\channel;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,7 +24,7 @@ class ChannelUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string:255',
+            'name' => 'nullable|string:255',
             'website' => 'nullable|url|max:255',
             'info' => 'nullable|string',
         ];
