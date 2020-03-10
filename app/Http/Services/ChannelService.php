@@ -20,15 +20,16 @@ class ChannelService
      */
     public static function updateChannelInfo(ChannelUpdateRequest $request)
     {
-        if ($channelId = $request->route('id')) {
-            $channel = channel::findOrFail($channelId);
-            $user = $channel->user;
-        } else {
-            $channel = auth()->user()->channel;
-            $user = auth()->user();
-        }
         try {
             DB::beginTransaction();
+            // WARNING: [you must pass the channel id NOT user_id or user table's id]
+            if ($channelId = $request->route('id')) {
+                $channel = channel::findOrFail($channelId);
+                $user = $channel->user;
+            } else {
+                $channel = auth()->user()->channel;
+                $user = auth()->user();
+            }
             if (empty($request->name) && empty($request->info) && empty($request->website)) {
                 return response(["message" => "no data to update from"], 200, ["NO_CHANGES" => 0]);
             }

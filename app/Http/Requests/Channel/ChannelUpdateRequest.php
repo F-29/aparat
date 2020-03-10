@@ -17,7 +17,9 @@ class ChannelUpdateRequest extends FormRequest
         if ($this->route()->hasParameter("id") && auth()->user()->type != User::TYPE_ADMIN) {
             return false;
         }
-
+        if (auth()->user()->type === User::TYPE_ADMIN && !$this->route()->hasParameter("id")) {
+            return false;
+        }
         return true;
     }
 
