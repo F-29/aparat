@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\channel;
 
+use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ChannelUpdateRequest extends FormRequest
@@ -13,6 +14,10 @@ class ChannelUpdateRequest extends FormRequest
      */
     public function authorize()
     {
+        if ($this->route()->hasParameter("id") && auth()->user()->type != User::TYPE_ADMIN) {
+            return false;
+        }
+
         return true;
     }
 

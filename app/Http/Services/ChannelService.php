@@ -21,9 +21,6 @@ class ChannelService
     public static function updateChannelInfo(ChannelUpdateRequest $request)
     {
         if ($channelId = $request->route('id')) {
-            if (auth()->user()->type != User::TYPE_ADMIN) {
-                throw new AuthorizationException("you are NOT [Authorized] to do this");
-            }
             $channel = channel::findOrFail($channelId);
             $user = $channel->user;
         } else {
