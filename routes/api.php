@@ -51,8 +51,13 @@ Route::group(["middleware" => "auth:api"], function ($Router) {
  * Channel Routes
  */
 Route::group(["middleware" => "auth:api", 'prefix' => '/channel'], function ($Router) {
+    $Router->post('/', [
+        'as' => 'channel.upload.banner',
+        'uses' => 'ChannelController@uploadBanner'
+    ]);
+
     $Router->put('/{id?}', [
-        'as'=> 'channel.update',
+        'as' => 'channel.update',
         'uses' => 'ChannelController@update'
     ]);
 });

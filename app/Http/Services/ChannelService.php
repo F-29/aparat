@@ -6,10 +6,12 @@ namespace App\Http\Services;
 
 use App\channel;
 use App\Http\Requests\channel\ChannelUpdateRequest;
-use App\User;
+use App\Http\Requests\Channel\UploadChannelBannerRequest;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ChannelService
 {
@@ -50,4 +52,35 @@ class ChannelService
         }
         return response(["message" => "updated"], 200, ["CHANGES" => 1]);
     }
+
+    /**
+     * @param UploadChannelBannerRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public static function uploadChannelBanner(UploadChannelBannerRequest $request)
+    {
+        try {
+            $banner = $request->file('banner');
+            $channel = auth()->user()->channel;
+            $fileDirectory = 'channel-banners' . DIRECTORY_SEPARATOR . md5($channel->user->email);
+            $fileName = md5(auth()->id()). '-' . Str::random(15);
+            $banner->move(public_path($fileDirectory) . DIRECTORY_SEPARATOR, $fileName);
+
+//            dd(public_path($channel->banner));
+            if ($channel->banner){
+                unlink(public_path($channel->banner));
+                File::delete(public_path($channel->banner));
+            }
+            $channel->banner = $fileDirectory . DIRECTORY_SEPARATOR . $fileName;
+            $channel->save();
+
+            return response([
+                'banner' => url($fileDirectory . DIRECTORY_SEPARATOR . $fileName)
+            ], 200);
+        } catch (\Exception $e) {
+            dd($e);
+            return response(['message' => 'there was an error'], 500);
+        }
+    }
+
 }
