@@ -63,11 +63,11 @@ class ChannelService
             $banner = $request->file('banner');
             $channel = auth()->user()->channel;
             $fileDirectory = 'channel-banners' . DIRECTORY_SEPARATOR . md5($channel->user->email);
-            $fileName = md5(auth()->id()). '-' . Str::random(15);
+            $fileName = md5(auth()->id()) . '-' . Str::random(15);
             $banner->move(public_path($fileDirectory) . DIRECTORY_SEPARATOR, $fileName);
 
 //            dd(public_path($channel->banner));
-            if ($channel->banner){
+            if ($channel->banner) {
                 unlink(public_path($channel->banner));
                 File::delete(public_path($channel->banner));
             }

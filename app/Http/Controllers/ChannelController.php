@@ -15,8 +15,7 @@ class ChannelController extends Controller
      */
     public function update(ChannelUpdateRequest $request)
     {
-         return ChannelService::updateChannelInfo($request);
-
+        return ChannelService::updateChannelInfo($request);
     }
 
     public function uploadBanner(UploadChannelBannerRequest $request)
