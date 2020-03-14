@@ -6,12 +6,20 @@ namespace App\Http\Services;
 
 use App\Http\Requests\User\ChangeEmailRequest;
 use App\Http\Requests\User\ChangeEmailSubmitRequest;
+use App\Http\Requests\User\ChangePasswordRequest;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
-class UserEmailService
+class UserService
 {
     const EMAIL_CHANGE_CACHE_KEY = 'change.email.for.';
 
+    /**
+     * @param ChangeEmailRequest $request
+     * @return int
+     * @throws \Exception
+     */
     public static function ChangeEmailService(ChangeEmailRequest $request)
     {
         $email = $request->email;
@@ -24,6 +32,10 @@ class UserEmailService
         return $code;
     }
 
+    /**
+     * @param ChangeEmailSubmitRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public static function ChangeEmailSubmitService(ChangeEmailSubmitRequest $request)
     {
         $userID = auth()->id();
@@ -40,5 +52,25 @@ class UserEmailService
         $user->email = $cache['email'];
         $user->save();
         Cache::forget($cacheKey);
+    }
+
+    public static function ChangePassword(ChangePasswordRequest $request)
+    {
+        try {
+            $user = auth()->user();
+
+            if (!Hash::check($request->old_password, $user->password)) {
+                return response(['message' => 'credentials wont match'], 400);
+            }
+
+            $user->password = bcrypt($request->new_password);
+            $user->save();
+
+            return response(['message' => 'changed'], 200);
+
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            return response(['message' => 'something went wrong!', 'P.S.' => 'in our side'], 500);
+        }
     }
 }

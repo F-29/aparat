@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\ChangeEmailRequest;
 use App\Http\Requests\User\ChangeEmailSubmitRequest;
-use App\Http\Services\UserEmailService;
-use App\User;
-use Illuminate\Support\Facades\Cache;
+use App\Http\Requests\User\ChangePasswordRequest;
+use App\Http\Services\UserService;
 
 class UserController extends Controller
 {
@@ -18,7 +17,7 @@ class UserController extends Controller
      */
     public function changeEmail(ChangeEmailRequest $request)
     {
-        $code = UserEmailService::ChangeEmailService($request);
+        $code = UserService::ChangeEmailService($request);
 
         // TODO: sending email to the user's new email address (for now we send the code in the response)
         return response([
@@ -33,10 +32,15 @@ class UserController extends Controller
      */
     public function changeEmailSubmit(ChangeEmailSubmitRequest $request)
     {
-        UserEmailService::ChangeEmailSubmitService($request);
+        UserService::ChangeEmailSubmitService($request);
 
         return response([
-            'message'=> 'email changed successfully!'
+            'message' => 'email changed successfully!'
         ], 200);
+    }
+
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        return UserService::ChangePassword($request);
     }
 }

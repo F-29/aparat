@@ -36,15 +36,18 @@ Route::group([], function (Router $Router) {
  */
 Route::group(["middleware" => "auth:api"], function (Router $Router) {
     $Router->post('change-email', [
-        'middleware' => ['auth:api'],
         'as' => 'change.email',
         'uses' => 'UserController@changeEmail',
     ]);
 
     $Router->post('change-email-submit', [
-        'middleware' => ['auth:api'],
         'as' => 'change.email.submit',
         'uses' => 'UserController@changeEmailSubmit'
+    ]);
+
+    $Router->match(['post', 'put'], 'change-password', [
+        'as' => 'password.change',
+        'uses' => 'UserController@changePassword',
     ]);
 });
 
