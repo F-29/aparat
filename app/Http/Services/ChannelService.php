@@ -6,6 +6,7 @@ namespace App\Http\Services;
 
 use App\channel;
 use App\Http\Requests\channel\ChannelUpdateRequest;
+use App\Http\Requests\Channel\UpdateSocialsRequest;
 use App\Http\Requests\Channel\UploadChannelBannerRequest;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,7 @@ class ChannelService
      */
     public static function updateChannelInfo(ChannelUpdateRequest $request)
     {
+        dd($request->all(), $request->user()->channel);
         try {
             DB::beginTransaction();
             // WARNING: [you must pass the channel id NOT user_id or user table's id]
@@ -59,6 +61,7 @@ class ChannelService
      */
     public static function uploadChannelBanner(UploadChannelBannerRequest $request)
     {
+        // TODO: change request's name to ChannelUploadBannerRequest
         try {
             $banner = $request->file('banner');
             $channel = auth()->user()->channel;
@@ -77,10 +80,34 @@ class ChannelService
             return response([
                 'banner' => url($fileDirectory . DIRECTORY_SEPARATOR . $fileName)
             ], 200);
-        } catch (\Exception $e) {
-            dd($e);
+        } catch (\Exception $exception) {
+            Log::error('ChannelService: ' . $exception);
             return response(['message' => 'there was an error'], 500);
         }
     }
 
+    /**
+     * @param UpdateSocialsRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public static function updateSocials(UpdateSocialsRequest $request)
+    {
+        try {
+            $socials = [
+                'cloob' => $request->input('cloob'),
+                'lenzor' => $request->input('lenzor'),
+                'instagram' => $request->input('instagram'),
+                'whatsapp' => $request->input('whatsapp'),
+                'facebook' => $request->input('facebook'),
+                'twitter' => $request->input('twitter'),
+                'telegram' => $request->input('telegram'),
+            ];
+            auth()->user()->channel->update(['socials' => $socials]);
+
+            return response(['message' => 'success'], 200);
+        } catch (\Exception $exception) {
+            Log::error('ChannelService: ' . $exception);
+            return response(['message' => 'there was an error'], 500);
+        }
+    }
 }
