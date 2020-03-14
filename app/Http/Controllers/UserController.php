@@ -39,6 +39,10 @@ class UserController extends Controller
         ], 200);
     }
 
+    /**
+     * @param ChangePasswordRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function changePassword(ChangePasswordRequest $request)
     {
         return UserService::ChangePassword($request);

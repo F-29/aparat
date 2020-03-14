@@ -54,6 +54,10 @@ class UserService
         Cache::forget($cacheKey);
     }
 
+    /**
+     * @param ChangePasswordRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public static function ChangePassword(ChangePasswordRequest $request)
     {
         try {
