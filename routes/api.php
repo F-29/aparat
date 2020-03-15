@@ -70,3 +70,13 @@ Route::group(["middleware" => "auth:api", 'prefix' => '/channel'], function (Rou
         'uses' => 'ChannelController@updateSocials',
     ]);
 });
+
+/**
+ * Videos Routes
+ */
+Route::group(["middleware" => "auth:api", 'prefix' => '/video'], function (Router $router) {
+    $router->post('/', [
+        'as' => 'video.upload',
+        'uses' => 'VideoController@upload'
+    ]);
+});

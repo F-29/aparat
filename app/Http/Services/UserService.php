@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
-class UserService
+class UserService extends Service
 {
     const EMAIL_CHANGE_CACHE_KEY = 'change.email.for.';
 

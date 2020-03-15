@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class ChannelService
+class ChannelService extends Service
 {
     /**
      * @param ChannelUpdateRequest $request
@@ -69,7 +69,6 @@ class ChannelService
             $fileName = md5(auth()->id()) . '-' . Str::random(15);
             $banner->move(public_path($fileDirectory) . DIRECTORY_SEPARATOR, $fileName);
 
-//            dd(public_path($channel->banner));
             if ($channel->banner) {
                 unlink(public_path($channel->banner));
                 File::delete(public_path($channel->banner));

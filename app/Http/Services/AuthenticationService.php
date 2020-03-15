@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Log;
 
-class AuthenticationService
+class AuthenticationService extends Service
 {
     /**
      * @param RegisterNewUserRequest $request
