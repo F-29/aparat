@@ -4,13 +4,17 @@
 namespace App\Http\Services;
 
 
+use App\Http\Requests\CreateVideoRequest;
 use App\Http\Requests\UploadVideoRequest;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class VideoService extends Service
 {
+    /**
+     * @param UploadVideoRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public static function UploadVideo(UploadVideoRequest $request)
     {
         try {
@@ -24,5 +28,10 @@ class VideoService extends Service
             Log::error('VideoService: ' . $exception);
             return response(['message' => 'there was an error'], 500);
         }
+    }
+
+    public static function CreateUploadedVideo(CreateVideoRequest $request)
+    {
+
     }
 }

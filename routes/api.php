@@ -75,8 +75,14 @@ Route::group(["middleware" => "auth:api", 'prefix' => '/channel'], function (Rou
  * Videos Routes
  */
 Route::group(["middleware" => "auth:api", 'prefix' => '/video'], function (Router $router) {
-    $router->post('/', [
+    $router->post('/upload', [
         'as' => 'video.upload',
         'uses' => 'VideoController@upload'
     ]);
+
+    $router->post('/', [
+        'as' => 'video.create',
+        'uses' => 'VideoController@create'
+    ]);
+
 });
