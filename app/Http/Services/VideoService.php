@@ -4,8 +4,8 @@
 namespace App\Http\Services;
 
 
-use App\Http\Requests\CreateVideoRequest;
-use App\Http\Requests\UploadVideoRequest;
+use App\Http\Requests\Video\CreateVideoRequest;
+use App\Http\Requests\Video\UploadVideoRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
