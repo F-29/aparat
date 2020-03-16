@@ -3,6 +3,7 @@
 /public/storage
 /public/channel-banners
 /public/videos
+/public/videos-banners
 /storage/*.key
 /vendor
 .env

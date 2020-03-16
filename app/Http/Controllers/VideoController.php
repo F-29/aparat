@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Video\UploadVideoBannerRequest;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Http\Requests\Video\UploadVideoRequest;
 use App\Http\Services\VideoService;
@@ -14,11 +15,19 @@ class VideoController extends Controller
      */
     public function upload(UploadVideoRequest $request)
     {
-        return VideoService::UploadVideo($request);
+        return VideoService::UploadVideoService($request);
     }
 
+    /**
+     * @param CreateVideoRequest $request
+     */
     public function create(CreateVideoRequest $request)
     {
-        return VideoService::CreateUploadedVideo($request);
+        return VideoService::CreateUploadedVideoService($request);
+    }
+
+    public function uploadBanner(UploadVideoBannerRequest $request)
+    {
+        return VideoService::UploadVideoBannerService($request);
     }
 }

@@ -58,7 +58,7 @@ class UserService extends Service
      * @param ChangePasswordRequest $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public static function ChangePassword(ChangePasswordRequest $request)
+    public static function ChangePasswordService(ChangePasswordRequest $request)
     {
         try {
             $user = auth()->user();

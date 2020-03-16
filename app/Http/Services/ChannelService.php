@@ -65,7 +65,7 @@ class ChannelService extends Service
         try {
             $banner = $request->file('banner');
             $channel = auth()->user()->channel;
-            $fileDirectory = 'channel-banners' . DIRECTORY_SEPARATOR . md5($channel->user->email);
+            $fileDirectory = env('CHANNEL_DIR') . DIRECTORY_SEPARATOR . md5($channel->user->email);
             $fileName = md5(auth()->id()) . '-' . Str::random(15);
             $banner->move(public_path($fileDirectory) . DIRECTORY_SEPARATOR, $fileName);
 

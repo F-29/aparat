@@ -45,6 +45,6 @@ class UserController extends Controller
      */
     public function changePassword(ChangePasswordRequest $request)
     {
-        return UserService::ChangePassword($request);
+        return UserService::ChangePasswordService($request);
     }
 }
