@@ -18,6 +18,14 @@ class CreateCategoriesTable extends Migration
             $table->string('title', 255)->unique();
             $table->string('icon', 255);
             $table->string('banner', 255)->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
+
             $table->timestamps();
         });
     }

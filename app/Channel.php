@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class channel extends Model
+class Channel extends Model
 {
     public function user()
     {

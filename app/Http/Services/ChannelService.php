@@ -4,7 +4,7 @@
 namespace App\Http\Services;
 
 
-use App\channel;
+use App\Channel;
 use App\Http\Requests\channel\ChannelUpdateRequest;
 use App\Http\Requests\Channel\UpdateSocialsRequest;
 use App\Http\Requests\Channel\UploadChannelBannerRequest;
@@ -28,7 +28,7 @@ class ChannelService extends Service
             DB::beginTransaction();
             // WARNING: [you must pass the channel id NOT user_id or user table's id]
             if ($channelId = $request->route('id')) {
-                $channel = channel::findOrFail($channelId);
+                $channel = Channel::findOrFail($channelId);
                 $user = $channel->user;
             } else {
                 $channel = auth()->user()->channel;

@@ -39,7 +39,7 @@ class User extends Authenticatable
      */
     public function channel()
     {
-        return $this->hasOne(channel::class);
+        return $this->hasOne(Channel::class);
     }
 
     /**

@@ -22,6 +22,7 @@ class CreateVideosTable extends Migration
             $table->text('info')->nullable();
             $table->integer('duration');
             $table->string('banner', 255)->nullable();
+            $table->unsignedBigInteger('channel_category_id');
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
 
@@ -32,6 +33,12 @@ class CreateVideosTable extends Migration
                 ->onUpdate('cascade');
 
             $table->foreign('category_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->foreign('channel_category_id')
                 ->references('id')
                 ->on('categories')
                 ->onDelete('cascade')
