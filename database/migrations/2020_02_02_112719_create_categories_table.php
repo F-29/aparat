@@ -16,7 +16,7 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title', 255)->unique();
-            $table->string('icon', 255);
+            $table->string('icon', 255)->nullable();
             $table->string('banner', 255)->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
 

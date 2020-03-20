@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Category;
 use Illuminate\Contracts\Validation\Rule;
 
 class CategoryIdRule implements Rule
@@ -24,13 +25,21 @@ class CategoryIdRule implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value)
     {
-        dd($value);
+        if ($this->categoryType === self::PUBLIC_CATEGORIES) {
+            return Category::where('id', $value)->whereNull('user_id')->count();
+        }
+
+        if ($this->categoryType === self::PRIVATE_CATEGORIES) {
+            return Category::where('id', $value)->where('user_id', auth()->id())->count();
+        }
+
+        return Category::where('id', $value)->count();
     }
 
     /**
