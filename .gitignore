@@ -2,8 +2,9 @@
 /public/hot
 /public/storage
 /public/channel-banners
-/public/videos
-/public/videos-banners
+/public/Video/videos
+/public/Video/videos-tmp
+/public/Video/video-banners
 /storage/*.key
 /vendor
 .env

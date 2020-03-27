@@ -56,3 +56,16 @@ if (!function_exists('random_verification_code')) {
         }
     }
 }
+
+if (!function_exists('right_dir_separator')) {
+    function right_dir_separator($dir)
+    {
+        if (strpos(PHP_OS, 'WIN') !== false) {
+            $dir = str_replace('/', "\\", $dir);
+        } else {
+            $dir = str_replace('\\', "/", $dir);
+        }
+
+        return $dir;
+    }
+}

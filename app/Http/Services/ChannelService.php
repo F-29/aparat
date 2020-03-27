@@ -23,7 +23,6 @@ class ChannelService extends Service
      */
     public static function updateChannelInfo(ChannelUpdateRequest $request)
     {
-        dd($request->all(), $request->user()->channel);
         try {
             DB::beginTransaction();
             // WARNING: [you must pass the channel id NOT user_id or user table's id]

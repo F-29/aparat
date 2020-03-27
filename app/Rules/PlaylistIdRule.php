@@ -2,9 +2,10 @@
 
 namespace App\Rules;
 
+use App\Playlist;
 use Illuminate\Contracts\Validation\Rule;
 
-class UploadedBannerIdRule implements Rule
+class PlaylistIdRule implements Rule
 {
     /**
      * Create a new rule instance.
@@ -25,7 +26,7 @@ class UploadedBannerIdRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        return file_exists(env('BANNER_DIR') . DIRECTORY_SEPARATOR . $value);
+        return Playlist::where(['id' => $value, 'user_id' => auth()->user()->id])->count();
     }
 
     /**
@@ -35,6 +36,6 @@ class UploadedBannerIdRule implements Rule
      */
     public function message()
     {
-        return 'Invalid banner id';
+        return 'Invalid playlist id';
     }
 }
