@@ -17,7 +17,6 @@ class CreateVideoReportCategoriesTable extends Migration
             $table->bigIncrements('id');
             $table->string('title', 100);
             $table->unsignedBigInteger('user_id');
-            $table->timestamps();
 
             $table->foreign('user_id')
                 ->references('id')

@@ -39,6 +39,7 @@ class CategoriesTableSeeder extends Seeder
 
             // personal category
             'ساندویچ' => ['icon' => null, 'banner' => null, 'user_id' => 1],
+            'پیتزا' => ['icon' => null, 'banner' => null, 'user_id' => 2],
         ];
         foreach ($categories as $categoryName => $options) {
             Category::create([

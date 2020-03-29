@@ -4,13 +4,17 @@
 namespace App\Http\Services;
 
 
+use App\Playlist;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+
+use App\Video;
+
 use App\Http\Requests\Video\UploadVideoBannerRequest;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Http\Requests\Video\UploadVideoRequest;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class VideoService extends Service
 {
@@ -33,23 +37,51 @@ class VideoService extends Service
         }
     }
 
+    /**
+     * @param CreateVideoRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public static function CreateUploadedVideoService(CreateVideoRequest $request)
     {
-
-        $video_dir = right_dir_separator(public_path(env('VIDEO_DIR')));
-        $tmp_video_dir = right_dir_separator(public_path(env('VIDEO_TMP_DIR')));
-
         try {
+            DB::beginTransaction();
+            $video_dir = right_dir_separator(public_path(env('VIDEO_DIR')));
+            $tmp_video_dir = right_dir_separator(public_path(env('VIDEO_TMP_DIR')));
             if (!file_exists(public_path(env('VIDEO_DIR'))) && !is_dir(public_path(env('VIDEO_DIR')))) {
                 mkdir($video_dir);
             }
-            $aa = File::move(
-                public_path(env('VIDEO_TMP_DIR') . DIRECTORY_SEPARATOR . $request->video_id),
-                public_path(env('VIDEO_DIR') . DIRECTORY_SEPARATOR . $request->video_id)
+            File::move(
+                $tmp_video_dir . DIRECTORY_SEPARATOR . $request->video_id,
+                $video_dir . DIRECTORY_SEPARATOR . $request->video_id
             );
-            dd($request->all(), $aa);
+            /**
+             * @var $video Video
+             */
+            $video = Video::create([
+                'title' => $request->title,
+                'user_id' => auth()->id(),
+                'category_id' => $request->category_id,
+                'channel_category_id' => $request->channel_category_id,
+                'slug' => $request->video_id, // TODO: calculate slug
+                'info' => $request->info,
+                'duration' => 0, // TODO: get video duration
+                'banner' => $request->banner,
+                'publish_at' => $request->publish_at,
+            ]);
+            if (!empty($request->playlist)) {
+                $playlist = Playlist::find($request->playlist);
+                $playlist->videos()->attach($video->id);
+            }
+            if (!empty($request->tags)) {
+                $video->tags()->attach($request->tags);
+            }
+            DB::commit();
+//            DB::rollBack();
+            return response(['message' => 'success', 'data' => $video], 200);
         } catch (\Exception $exception) {
-            dd($exception);
+            DB::rollBack();
+            Log::error("error in CreateUploadedVideoService " . $exception);
+            return response(['message' => 'there was an error'], 500);
         }
     }
 

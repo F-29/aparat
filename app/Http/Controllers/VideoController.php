@@ -20,12 +20,17 @@ class VideoController extends Controller
 
     /**
      * @param CreateVideoRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function create(CreateVideoRequest $request)
     {
         return VideoService::CreateUploadedVideoService($request);
     }
 
+    /**
+     * @param UploadVideoBannerRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function uploadBanner(UploadVideoBannerRequest $request)
     {
         return VideoService::UploadVideoBannerService($request);

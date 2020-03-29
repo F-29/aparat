@@ -17,7 +17,6 @@ class CreatePlaylistsTable extends Migration
             $table->bigIncrements('id');
             $table->string('title', 200);
             $table->unsignedBigInteger('user_id')->nullable();
-//            $table->unsignedBigInteger('video_id');
             $table->timestamps();
 
             $table->foreign('user_id')

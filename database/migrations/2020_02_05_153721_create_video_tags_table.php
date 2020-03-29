@@ -17,7 +17,6 @@ class CreateVideoTagsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('video_id');
             $table->unsignedBigInteger('tag_id');
-            $table->timestamps();
 
             $table->foreign('video_id')
                 ->references('id')
