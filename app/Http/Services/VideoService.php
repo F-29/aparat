@@ -8,6 +8,7 @@ use App\Playlist;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 use App\Video;
@@ -15,6 +16,7 @@ use App\Video;
 use App\Http\Requests\Video\UploadVideoBannerRequest;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Http\Requests\Video\UploadVideoRequest;
+//use Pbmedia\LaravelFFMpeg\FFMpegFacade;
 
 class VideoService extends Service
 {
@@ -27,8 +29,7 @@ class VideoService extends Service
         try {
             $video = $request->file('video');
             $fileName = md5(time()) . Str::random(10);
-            $path = public_path(env('VIDEO_TMP_DIR'));
-            $video->move($path, $fileName);
+            Storage::disk('videos')->put('/tmp/' . $fileName, $video->get());
 
             return response(['message' => 'success', 'video' => $fileName], 200);
         } catch (\Exception $exception) {
@@ -44,6 +45,7 @@ class VideoService extends Service
     public static function CreateUploadedVideoService(CreateVideoRequest $request)
     {
         try {
+            dd($video = \FFM::fromDisk('videos')->open('/tmp/' . $request->video_id));
             DB::beginTransaction();
             $video_dir = right_dir_separator(public_path(env('VIDEO_DIR')));
             $tmp_video_dir = right_dir_separator(public_path(env('VIDEO_TMP_DIR')));
@@ -54,6 +56,7 @@ class VideoService extends Service
                 $tmp_video_dir . DIRECTORY_SEPARATOR . $request->video_id,
                 $video_dir . DIRECTORY_SEPARATOR . $request->video_id
             );
+            $slug = Str::random(rand(6, 18));
             /**
              * @var $video Video
              */
@@ -62,12 +65,15 @@ class VideoService extends Service
                 'user_id' => auth()->id(),
                 'category_id' => $request->category_id,
                 'channel_category_id' => $request->channel_category_id,
-                'slug' => $request->video_id, // TODO: calculate slug
+                'slug' => '',
                 'info' => $request->info,
                 'duration' => 0, // TODO: get video duration
                 'banner' => $request->banner,
                 'publish_at' => $request->publish_at,
             ]);
+            $video->slug = $slug;
+            $video->banner = $video->slug . '-banner';
+
             if (!empty($request->playlist)) {
                 $playlist = Playlist::find($request->playlist);
                 $playlist->videos()->attach($video->id);
@@ -79,6 +85,7 @@ class VideoService extends Service
 //            DB::rollBack();
             return response(['message' => 'success', 'data' => $video], 200);
         } catch (\Exception $exception) {
+            dd($exception);
             DB::rollBack();
             Log::error("error in CreateUploadedVideoService " . $exception);
             return response(['message' => 'there was an error'], 500);
@@ -92,10 +99,11 @@ class VideoService extends Service
     public static function UploadVideoBannerService(UploadVideoBannerRequest $request)
     {
         try {
-            $video = $request->file('banner');
+            $banner = $request->file('banner');
             $fileName = md5(time()) . Str::random(10);
-            $path = public_path(env('BANNER_DIR'));
-            $video->move($path, $fileName);
+//            $path = public_path(env('BANNER_DIR'));
+//            $banner->move($path, $fileName);
+            Storage::disk('videos')->put('/tmp/' . $fileName, $banner->get());
 
             return response(['message' => 'success', 'banner' => $fileName], 200);
         } catch (\Exception $exception) {

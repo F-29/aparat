@@ -64,6 +64,11 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        'videos' => [
+            'driver' => 'local',
+            'root' => public_path('videos'),
+        ],
+
     ],
 
 ];

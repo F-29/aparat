@@ -176,6 +176,11 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         /*
+         * Third-party libraries Service Providers...
+         */
+        \Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
+
+        /*
          * Aparat Service Providers...
          */
         App\Providers\ModelObserverProvider::class,
@@ -230,6 +235,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        // ******* //
+        'FFM' => \Pbmedia\LaravelFFMpeg\FFMpegFacade::class,
 
     ],
 
