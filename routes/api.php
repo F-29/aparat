@@ -91,3 +91,18 @@ Route::group(["middleware" => "auth:api", 'prefix' => '/video'], function (Route
     ]);
 
 });
+
+/**
+ * Category Routes
+ */
+Route::group(["middleware" => "auth:api", 'prefix' => '/category'], function (Router $Router) {
+    $Router->get('/', [
+        'as' => 'category.all',
+        'uses' => 'CategoryController@all'
+    ]);
+
+    $Router->get('/my-categories', [
+        'as' => 'category.my',
+        'uses' => 'CategoryController@myCategories'
+        ]);
+});
