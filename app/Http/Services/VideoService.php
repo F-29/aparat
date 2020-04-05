@@ -16,7 +16,8 @@ use App\Video;
 use App\Http\Requests\Video\UploadVideoBannerRequest;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Http\Requests\Video\UploadVideoRequest;
-//use Pbmedia\LaravelFFMpeg\FFMpegFacade;
+use Pbmedia\LaravelFFMpeg\FFMpegFacade;
+use Pbmedia\LaravelFFMpeg\Media;
 
 class VideoService extends Service
 {
@@ -45,7 +46,9 @@ class VideoService extends Service
     public static function CreateUploadedVideoService(CreateVideoRequest $request)
     {
         try {
-            dd($video = \FFM::fromDisk('videos')->open('/tmp/' . $request->video_id));
+            /** @var Media $video_duration */
+            $video_duration = FFMpegFacade::fromDisk('videos')->open('/tmp/' . $request->video_id);
+            $video_duration = $video_duration->getDurationInSeconds();
             DB::beginTransaction();
             $video_dir = right_dir_separator(public_path(env('VIDEO_DIR')));
             $tmp_video_dir = right_dir_separator(public_path(env('VIDEO_TMP_DIR')));
@@ -67,12 +70,13 @@ class VideoService extends Service
                 'channel_category_id' => $request->channel_category_id,
                 'slug' => '',
                 'info' => $request->info,
-                'duration' => 0, // TODO: get video duration
+                'duration' => $video_duration,
                 'banner' => $request->banner,
                 'publish_at' => $request->publish_at,
             ]);
             $video->slug = $slug;
             $video->banner = $video->slug . '-banner';
+            $video->save();
 
             if (!empty($request->playlist)) {
                 $playlist = Playlist::find($request->playlist);
