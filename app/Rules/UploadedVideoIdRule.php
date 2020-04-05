@@ -25,7 +25,7 @@ class UploadedVideoIdRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        return file_exists(env('VIDEO_TMP_DIR') . DIRECTORY_SEPARATOR . $value);
+        return file_exists(env('VIDEO_ROOT') . DIRECTORY_SEPARATOR . env('VIDEO_TMP_DIR') . DIRECTORY_SEPARATOR . $value);
     }
 
     /**

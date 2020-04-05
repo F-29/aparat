@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Authentication Routes
@@ -9,44 +9,44 @@ use Illuminate\Routing\Router;
 Route::group([], function (Router $Router) {
     $Router->group(["namespace" => "\Laravel\Passport\Http\Controllers"], function (Router $router) {
         $router->post('login', [
-            'as' => 'login',
+            'as' => 'auth.login',
             'middleware' => ['throttle'],
             'uses' => 'AccessTokenController@issueToken',
         ]);
     });
 
     $Router->post('register', [
-        'as' => 'register',
+        'as' => 'auth.register',
         'uses' => 'AuthController@register',
     ]);
 
     $Router->post('register-verify', [
-        'as' => 'register-verify',
+        'as' => 'auth.register.verify',
         'uses' => 'AuthController@register_verify',
     ]);
 
     $Router->post('register-verify-resend', [
-        'as' => 'register-verify-resend',
+        'as' => 'auth.register.verify.resend',
         'uses' => 'AuthController@register_verify_resend',
     ]);
 });
 
 /**
- * User Related Routes
+ * User Routes
  */
 Route::group(["middleware" => "auth:api"], function (Router $Router) {
     $Router->post('change-email', [
-        'as' => 'change.email',
+        'as' => 'user.change.email',
         'uses' => 'UserController@changeEmail',
     ]);
 
     $Router->post('change-email-submit', [
-        'as' => 'change.email.submit',
+        'as' => 'user.change.email.submit',
         'uses' => 'UserController@changeEmailSubmit'
     ]);
 
     $Router->match(['post', 'put'], 'change-password', [
-        'as' => 'password.change',
+        'as' => 'user.change.password',
         'uses' => 'UserController@changePassword',
     ]);
 });
@@ -72,21 +72,21 @@ Route::group(["middleware" => "auth:api", 'prefix' => '/channel'], function (Rou
 });
 
 /**
- * Videos Routes
+ * Video Routes
  */
 Route::group(["middleware" => "auth:api", 'prefix' => '/video'], function (Router $router) {
     $router->post('/upload', [
-        'as' => 'video.upload',
+        'as' => 'video.upload.video',
         'uses' => 'VideoController@upload'
     ]);
 
     $router->post('/upload-banner', [
-        'as' => 'video.create',
+        'as' => 'video.upload.banner',
         'uses' => 'VideoController@uploadBanner'
     ]);
 
     $router->post('/', [
-        'as' => 'video.create',
+        'as' => 'video.submit',
         'uses' => 'VideoController@create'
     ]);
 

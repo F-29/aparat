@@ -25,7 +25,7 @@ class UploadedBannerIdRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        return file_exists(env('BANNER_DIR') . DIRECTORY_SEPARATOR . $value);
+        return file_exists(env('VIDEO_ROOT') . DIRECTORY_SEPARATOR . env('BANNER_DIR') . DIRECTORY_SEPARATOR . $value);
     }
 
     /**
