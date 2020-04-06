@@ -43,6 +43,15 @@ class User extends Authenticatable
     }
 
     /**
+     * oneToMany relationship
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

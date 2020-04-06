@@ -24,7 +24,7 @@ class UploadVideoBannerRequest extends FormRequest
     public function rules()
     {
         return [
-            'banner' => 'required|image'
+            'banner' => 'required|file|image|mimes:jpeg,png,jpg,gif,svg|max:4096'
         ];
     }
 }

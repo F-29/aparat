@@ -105,4 +105,14 @@ Route::group(["middleware" => "auth:api", 'prefix' => '/category'], function (Ro
         'as' => 'category.my',
         'uses' => 'CategoryController@myCategories'
         ]);
+
+    $Router->post('/upload-banner', [
+        'as' => 'category.upload.banner',
+        'uses' => 'CategoryController@uploadBanner'
+    ]);
+
+    $Router->post('/', [
+        'as' => 'category.create',
+        'uses' => 'CategoryController@create'
+    ]);
 });

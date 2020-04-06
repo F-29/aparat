@@ -60,7 +60,7 @@ class ChannelService extends Service
      */
     public static function uploadChannelBanner(UploadChannelBannerRequest $request)
     {
-        // TODO: change request's name to ChannelUploadBannerRequest
+        // TODO: make this 'upload banner like the rest of them' (create a 'disk', ...)
         try {
             $banner = $request->file('banner');
             $channel = auth()->user()->channel;

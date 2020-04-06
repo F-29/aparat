@@ -87,7 +87,7 @@ class VideoService extends Service
             return response(['message' => 'success', 'data' => $video], 200);
         } catch (Exception $exception) {
             DB::rollBack();
-            Log::error("error in CreateUploadedVideoService " . $exception);
+            Log::error("VideoService: " . $exception);
             return response(['message' => 'there was an error'], 500);
         }
     }
@@ -101,9 +101,8 @@ class VideoService extends Service
         try {
             $banner = $request->file('banner');
             $fileName = md5(time()) . Str::random(10);
-//            $path = public_path(env('BANNER_DIR'));
-//            $banner->move($path, $fileName);
-            Storage::disk('videos')->put('/tmp/' . $fileName, $banner->get());
+            Storage::disk('videos')->put(DIRECTORY_SEPARATOR . env('BANNER_DIR') .
+                DIRECTORY_SEPARATOR . $fileName, $banner->get());
 
             return response(['message' => 'success', 'banner' => $fileName], 200);
         } catch (Exception $exception) {

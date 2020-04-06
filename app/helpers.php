@@ -58,6 +58,10 @@ if (!function_exists('random_verification_code')) {
 }
 
 if (!function_exists('right_dir_separator')) {
+    /**
+     * @param $dir
+     * @return string|string[]
+     */
     function right_dir_separator($dir)
     {
         if (strpos(PHP_OS, 'WIN') !== false) {
@@ -67,5 +71,27 @@ if (!function_exists('right_dir_separator')) {
         }
 
         return $dir;
+    }
+}
+
+if (!function_exists('randomize_for_id')) {
+    /**
+     * @param int $id
+     * @return int
+     */
+    function randomize_for_id(int $id)
+    {
+        return ($id * 1000) + 33 + (6000 + 200 + 70 + 1);
+    }
+}
+
+if (!function_exists('derandomize_for_id')) {
+    /**
+     * @param int $id
+     * @return int
+     */
+    function derandomize_for_id(int $id)
+    {
+        return (int)($id - 33 - 6000 - 200 - 70 - 1) / 1000;
     }
 }

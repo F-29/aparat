@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class UploadedBannerIdRule implements Rule
 {
@@ -25,7 +26,7 @@ class UploadedBannerIdRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        return file_exists(env('VIDEO_ROOT') . DIRECTORY_SEPARATOR . env('BANNER_DIR') . DIRECTORY_SEPARATOR . $value);
+        return Storage::disk('videos')->exists(env('BANNER_DIR') . DIRECTORY_SEPARATOR . $value);
     }
 
     /**
@@ -35,6 +36,6 @@ class UploadedBannerIdRule implements Rule
      */
     public function message()
     {
-        return 'Invalid banner id';
+        return 'Invalid video banner id';
     }
 }

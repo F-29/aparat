@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Channel;
+namespace App\Http\Requests\Category;
 
+use App\Rules\UploadedCategoryBannerIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UploadChannelBannerRequest extends FormRequest
+class CreateCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +25,9 @@ class UploadChannelBannerRequest extends FormRequest
     public function rules()
     {
         return [
-            'banner' => 'required|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'title' => 'required|string|min:2|max:100|unique:categories,title',
+            'icon' => 'string|nullable', // TODO: decide which package should we use
+            'banner' => ['nullable', 'string', new UploadedCategoryBannerIdRule()]
         ];
     }
 }

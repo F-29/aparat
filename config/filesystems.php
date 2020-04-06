@@ -69,6 +69,11 @@ return [
             'root' => public_path(env('VIDEO_ROOT')),
         ],
 
+        'category' => [
+            'driver' => 'local',
+            'root' => public_path(env('CATEGORY_BANNER_DIR')),
+        ],
+
     ],
 
 ];
