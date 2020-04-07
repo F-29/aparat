@@ -33,6 +33,11 @@ class User extends Authenticatable
         $this->attributes['mobile'] = to_valid_mobile_number($value);
     }
 
+    public function playlists()
+    {
+        return $this->hasMany(Playlist::class);
+    }
+
     /**
      * oneToMany relationship
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

@@ -116,3 +116,17 @@ Route::group(["middleware" => "auth:api", 'prefix' => '/category'], function (Ro
         'uses' => 'CategoryController@create'
     ]);
 });
+
+/**
+ * Playlist Routes
+ */
+Route::group(["middleware" => "auth:api", 'prefix' => '/playlist'], function (Router $Router) {
+    $Router->get('/',[
+        'as' => 'playlist.all',
+        'uses' => 'PlaylistController@all'
+    ]);
+    $Router->get('/my-playlists',[
+        'as' => 'playlist.my',
+        'uses' => 'PlaylistController@myPlaylists'
+    ]);
+});
