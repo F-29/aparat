@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Playlist extends Model
 {
+    //region Relations
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -21,10 +22,13 @@ class Playlist extends Model
     {
         return $this->belongsToMany(Video::class, 'playlist_videos');
     }
+    //endregion
 
+    //region Model config
     protected $table = 'playlists';
     protected $fillable = [
         'title',
         'user_id',
     ];
+    //endregion
 }

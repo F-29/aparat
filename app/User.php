@@ -6,15 +6,23 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
+/**
+ * @method static where(string $string, $username)
+ */
 class User extends Authenticatable
 {
 
+    //region User type config
     const TYPE_USER = 'user';
     const TYPE_ADMIN = 'admin';
     const TYPES = [self::TYPE_ADMIN, self::TYPE_USER];
+    //endregion
 
+    //region Traits
     use HasApiTokens, Notifiable;
+    //endregion
 
+    //region Custom util method for model
     /**
      * find and login the user through 1-email or 2-mobile
      * @param $username
@@ -24,7 +32,9 @@ class User extends Authenticatable
     {
         return static::where('mobile', $username)->orWhere('email', $username)->first();
     }
+    //endregion
 
+    //region Model setters
     /**
      * @param $value
      */
@@ -32,7 +42,13 @@ class User extends Authenticatable
     {
         $this->attributes['mobile'] = to_valid_mobile_number($value);
     }
+    //endregion
 
+    //region Relations
+    /**
+     * manyToOne relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function playlists()
     {
         return $this->hasMany(Playlist::class);
@@ -55,7 +71,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Category::class);
     }
+    //endregion
 
+    //region Model config
     /**
      * The attributes that are mass assignable.
      *
@@ -82,6 +100,7 @@ class User extends Authenticatable
     protected $casts = [
         'verified_at' => 'datetime',
     ];
+    //endregion
 }
 
 

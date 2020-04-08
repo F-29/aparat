@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Playlist;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetAllPlaylistsRequest extends FormRequest
+class GetMyPlaylistsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

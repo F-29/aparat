@@ -129,4 +129,8 @@ Route::group(["middleware" => "auth:api", 'prefix' => '/playlist'], function (Ro
         'as' => 'playlist.my',
         'uses' => 'PlaylistController@myPlaylists'
     ]);
+    $Router->post('/create',[
+        'as' => 'playlist.create',
+        'uses' => 'PlaylistController@create'
+    ]);
 });

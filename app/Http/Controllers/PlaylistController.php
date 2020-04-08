@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\GetAllPlaylistsRequest;
-use App\Http\Requests\GetMyPlaylistsRequest;
+use App\Http\Requests\Playlist\CreatePlaylistRequest;
+use App\Http\Requests\Playlist\GetAllPlaylistsRequest;
+use App\Http\Requests\Playlist\GetMyPlaylistsRequest;
 use App\Http\Services\PlaylistService;
 
 class PlaylistController extends Controller
@@ -14,11 +15,24 @@ class PlaylistController extends Controller
      */
     public function all(GetAllPlaylistsRequest $request)
     {
-        return PlaylistService::getAllPlaylists($request);
+        return PlaylistService::getAllPlaylistsService($request);
     }
 
+    /**
+     * @param GetMyPlaylistsRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function myPlaylists(GetMyPlaylistsRequest $request)
     {
-        return PlaylistService::getMyPlaylists($request);
+        return PlaylistService::getMyPlaylistsService($request);
+    }
+
+    /**
+     * @param CreatePlaylistRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function create(CreatePlaylistRequest $request)
+    {
+        return PlaylistService::createPlaylistService($request);
     }
 }
