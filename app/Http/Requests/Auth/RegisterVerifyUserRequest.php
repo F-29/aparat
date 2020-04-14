@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
-use App\Rules\MobileRule;
+use App\Rules\Unique\MobileRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterVerifyUserRequest extends FormRequest

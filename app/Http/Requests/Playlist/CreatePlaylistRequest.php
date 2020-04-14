@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Playlist;
 
-use App\Rules\UniqueForUserRule;
+use App\Rules\Unique\UniqueForUserRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreatePlaylistRequest extends FormRequest

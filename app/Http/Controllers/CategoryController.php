@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Category\CreateCategoryRequest;
 use App\Http\Requests\Category\GetAllCategoriesRequest;
 use App\Http\Requests\Category\GetMyCategoriesRequest;
-use App\Http\Requests\Category\CreateCategoryRequest;
 use App\Http\Requests\Category\UploadCategoryBannerRequest;
 use App\Http\Services\CategoryService;
 

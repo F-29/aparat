@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Category;
 
-use App\Rules\UniqueForUserRule;
-use App\Rules\UploadedCategoryBannerIdRule;
+use App\Rules\Unique\UniqueForUserRule;
+use App\Rules\Upload\UploadedCategoryBannerIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateCategoryRequest extends FormRequest

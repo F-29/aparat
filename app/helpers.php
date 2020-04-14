@@ -60,10 +60,15 @@ if (!function_exists('random_verification_code')) {
 if (!function_exists('right_dir_separator')) {
     /**
      * @param $dir
+     * @param bool $is_web
      * @return string|string[]
      */
-    function right_dir_separator($dir)
+    function right_dir_separator($dir, bool $is_web = false)
     {
+        if ($is_web) {
+            return str_replace('\\', "/", $dir);
+        }
+
         if (strpos(PHP_OS, 'WIN') !== false) {
             $dir = str_replace('/', "\\", $dir);
         } else {

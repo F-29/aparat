@@ -20,6 +20,7 @@ class User extends Authenticatable
 
     //region Traits
     use HasApiTokens, Notifiable;
+
     //endregion
 
     //region Custom util method for model

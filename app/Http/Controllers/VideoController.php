@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Video\UploadVideoBannerRequest;
 use App\Http\Requests\Video\CreateVideoRequest;
+use App\Http\Requests\Video\UploadVideoBannerRequest;
 use App\Http\Requests\Video\UploadVideoRequest;
 use App\Http\Services\VideoService;
 

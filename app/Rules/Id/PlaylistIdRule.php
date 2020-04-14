@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Rules;
+namespace App\Rules\Id;
 
+use App\Playlist;
 use Illuminate\Contracts\Validation\Rule;
 
-class MobileRule implements Rule
+class PlaylistIdRule implements Rule
 {
     /**
      * Create a new rule instance.
@@ -19,15 +20,13 @@ class MobileRule implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value)
     {
-        $mobileRegex = '~^(0098|\+?98|0)9\d{9}$~';
-        preg_match($mobileRegex, $value, $maches);
-        return !empty($maches);
+        return Playlist::where(['id' => $value, 'user_id' => auth()->user()->id])->count();
     }
 
     /**
@@ -37,6 +36,6 @@ class MobileRule implements Rule
      */
     public function message()
     {
-        return 'wrong formatted mobile number';
+        return 'Invalid playlist id';
     }
 }

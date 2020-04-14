@@ -76,7 +76,7 @@ class ChannelService extends Service
             $channel->save();
 
             return response([
-                'banner' => url($fileDirectory . DIRECTORY_SEPARATOR . $fileName)
+                'banner' => right_dir_separator(url($fileDirectory . DIRECTORY_SEPARATOR . $fileName), true)
             ], 200);
         } catch (\Exception $exception) {
             Log::error('ChannelService: ' . $exception);

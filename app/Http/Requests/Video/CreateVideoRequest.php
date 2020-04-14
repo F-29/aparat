@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Video;
 
-use App\Rules\CategoryIdRule;
-use App\Rules\PlaylistIdRule;
-use App\Rules\UploadedVideoIdRule;
-use App\Rules\UploadedBannerIdRule;
+use App\Rules\Id\CategoryIdRule;
+use App\Rules\Id\PlaylistIdRule;
+use App\Rules\Upload\UploadedBannerIdRule;
+use App\Rules\Upload\UploadedVideoIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateVideoRequest extends FormRequest
