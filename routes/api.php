@@ -104,7 +104,7 @@ Route::group(["middleware" => "auth:api", 'prefix' => '/category'], function (Ro
     $Router->get('/my-categories', [
         'as' => 'category.my',
         'uses' => 'CategoryController@myCategories'
-        ]);
+    ]);
 
     $Router->post('/upload-banner', [
         'as' => 'category.upload.banner',
@@ -121,16 +121,30 @@ Route::group(["middleware" => "auth:api", 'prefix' => '/category'], function (Ro
  * Playlist Routes
  */
 Route::group(["middleware" => "auth:api", 'prefix' => '/playlist'], function (Router $Router) {
-    $Router->get('/',[
+    $Router->get('/', [
         'as' => 'playlist.all',
         'uses' => 'PlaylistController@all'
     ]);
-    $Router->get('/my-playlists',[
+    $Router->get('/my-playlists', [
         'as' => 'playlist.my',
         'uses' => 'PlaylistController@myPlaylists'
     ]);
-    $Router->post('/create',[
+    $Router->post('/create', [
         'as' => 'playlist.create',
         'uses' => 'PlaylistController@create'
+    ]);
+});
+
+/**
+ * Tag Routes
+ */
+Route::group(["middleware" => "auth:api", 'prefix' => '/tag'], function (Router $Router) {
+    $Router->get('/', [
+        'as' => 'tag.all',
+        'uses' => 'TagController@all'
+    ]);
+    $Router->post('/create', [
+        'as' => 'tag.create',
+        'uses' => 'TagController@create'
     ]);
 });
