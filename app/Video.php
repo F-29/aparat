@@ -31,7 +31,7 @@ class Video extends Model
     protected $table = 'videos';
     protected $fillable = [
         'title', 'user_id', 'category_id', 'channel_category_id',
-        'slug', 'info', 'duration', 'banner', 'publish_at',
+        'slug', 'info', 'duration', 'banner', 'publish_at', 'commentable'
     ];
     //endregion
 }

@@ -49,9 +49,6 @@ class VideoService extends Service
                 ->open(DIRECTORY_SEPARATOR . env('VIDEO_TMP_DIR') . DIRECTORY_SEPARATOR . $request->video_id);
             $video_duration = $video_duration->getDurationInSeconds();
             $slug = Str::random(rand(6, 18));
-            /**
-             * @var $video Video
-             */
             DB::beginTransaction();
             $video = Video::create([
                 'title' => $request->title,
@@ -63,6 +60,7 @@ class VideoService extends Service
                 'duration' => $video_duration,
                 'banner' => '',
                 'publish_at' => $request->publish_at,
+                'commentable' => $request->commentable
             ]);
             $video->slug = $slug;
             $video->banner = $video->slug . '-banner';

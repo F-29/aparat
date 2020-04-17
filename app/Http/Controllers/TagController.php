@@ -17,6 +17,10 @@ class TagController extends Controller
         return TagService::getAllTagsService($request);
     }
 
+    /**
+     * @param CreateTagRequest $request
+     * @return \App\Tag|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
+     */
     public function create(CreateTagRequest $request)
     {
         return TagService::createTagService($request);

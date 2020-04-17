@@ -23,6 +23,7 @@ class CreateVideosTable extends Migration
             $table->integer('duration');
             $table->string('banner', 255)->nullable();
             $table->unsignedBigInteger('channel_category_id');
+            $table->boolean('commentable')->default(true);
             $table->timestamp('publish_at')->nullable();
             $table->timestamps();
 
