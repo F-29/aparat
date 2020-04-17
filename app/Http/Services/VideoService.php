@@ -10,6 +10,7 @@ use App\Http\Requests\Video\UploadVideoRequest;
 use App\Playlist;
 use App\Video;
 use Exception;
+use FFMpeg\Filters\Video\CustomFilter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -47,6 +48,15 @@ class VideoService extends Service
             /** @var Media $video_duration */
             $video_duration = FFMpegFacade::fromDisk('videos')
                 ->open(DIRECTORY_SEPARATOR . env('VIDEO_TMP_DIR') . DIRECTORY_SEPARATOR . $request->video_id);
+            $filter = new CustomFilter("drawtext=text='http\\://aparat.me': fontcolor=white@0.3: fontsize=23:
+             box=1: boxcolor=white@0.001: boxborderw=10: x=10: y=(h - text_h - 10)");
+            $video_duration
+                ->addFilter($filter)
+                ->export()
+                ->toDisk('videos')
+                ->inFormat(new \FFMpeg\Format\Video\WMV())
+                ->save('tmp/export.mkv');
+            dd('saved!');
             $video_duration = $video_duration->getDurationInSeconds();
             $slug = Str::random(rand(6, 18));
             DB::beginTransaction();
@@ -84,6 +94,7 @@ class VideoService extends Service
             DB::commit();
             return response(['message' => 'success', 'data' => $video], 200);
         } catch (Exception $exception) {
+            dd($exception);
             DB::rollBack();
             Log::error("VideoService: " . $exception);
             return response(['message' => 'there was an error'], 500);
