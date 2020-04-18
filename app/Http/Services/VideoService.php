@@ -11,12 +11,12 @@ use App\Playlist;
 use App\Video;
 use Exception;
 use FFMpeg\Filters\Video\CustomFilter;
+use FFMpeg\Format\Video\X264;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Pbmedia\LaravelFFMpeg\FFMpegFacade;
-use Pbmedia\LaravelFFMpeg\Media;
 
 class VideoService extends Service
 {
@@ -45,19 +45,18 @@ class VideoService extends Service
     public static function CreateUploadedVideoService(CreateVideoRequest $request)
     {
         try {
-            /** @var Media $video_duration */
-            $video_duration = FFMpegFacade::fromDisk('videos')
-                ->open(DIRECTORY_SEPARATOR . env('VIDEO_TMP_DIR') . DIRECTORY_SEPARATOR . $request->video_id);
+            $uploadedVideoPath = DIRECTORY_SEPARATOR . env('VIDEO_TMP_DIR') . DIRECTORY_SEPARATOR . $request->video_id;
+            $video = FFMpegFacade::fromDisk('videos')
+                ->open($uploadedVideoPath);
             $filter = new CustomFilter("drawtext=text='http\\://aparat.me': fontcolor=white@0.3: fontsize=23:
-             box=1: boxcolor=white@0.001: boxborderw=10: x=10: y=(h - text_h - 10)");
-            $video_duration
+             box=1: boxcolor=white@0.0001: boxborderw=10: x=10: y=(h - text_h - 10)");
+            $videoFile = $video
                 ->addFilter($filter)
                 ->export()
                 ->toDisk('videos')
-                ->inFormat(new \FFMpeg\Format\Video\WMV())
-                ->save('tmp/export.mkv');
-            dd('saved!');
-            $video_duration = $video_duration->getDurationInSeconds();
+                ->inFormat(new X264('libmp3lame'));
+
+            $video_duration = $video->getDurationInSeconds();
             $slug = Str::random(rand(6, 18));
             DB::beginTransaction();
             $video = Video::create([
@@ -76,9 +75,8 @@ class VideoService extends Service
             $video->banner = $video->slug . '-banner';
             $video->save();
 
-            Storage::disk('videos')
-                ->move(DIRECTORY_SEPARATOR . env('VIDEO_TMP_DIR') . DIRECTORY_SEPARATOR
-                    . $request->video_id, md5(auth()->id()) . DIRECTORY_SEPARATOR . $video->slug);
+            $videoFile->save(auth()->id() . '/' . $video->slug . '.mp4');
+            Storage::disk('videos')->delete($uploadedVideoPath);
             if ($request->banner) {
                 Storage::disk('videos')->move(DIRECTORY_SEPARATOR . env('VIDEO_TMP_DIR') . DIRECTORY_SEPARATOR
                     . $request->banner, md5(auth()->id()) . DIRECTORY_SEPARATOR . $video->banner);
