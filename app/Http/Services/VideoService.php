@@ -10,7 +10,6 @@ use App\Http\Requests\Video\UploadVideoRequest;
 use App\Playlist;
 use App\Video;
 use Exception;
-use FFMpeg\Filters\Video\CustomFilter;
 use FFMpeg\Format\Video\X264;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -46,10 +45,10 @@ class VideoService extends Service
     {
         try {
             $uploadedVideoPath = DIRECTORY_SEPARATOR . env('VIDEO_TMP_DIR') . DIRECTORY_SEPARATOR . $request->video_id;
+            $slug = Str::random(rand(6, 18));
             $video = FFMpegFacade::fromDisk('videos')
                 ->open($uploadedVideoPath);
-            $filter = new CustomFilter("drawtext=text='http\\://aparat.me': fontcolor=white@0.3: fontsize=23:
-             box=1: boxcolor=white@0.0001: boxborderw=10: x=10: y=(h - text_h - 10)");
+            $filter = create_watermark(auth()->user()->name . '/' . $slug);
             $videoFile = $video
                 ->addFilter($filter)
                 ->export()
@@ -57,7 +56,6 @@ class VideoService extends Service
                 ->inFormat(new X264('libmp3lame'));
 
             $video_duration = $video->getDurationInSeconds();
-            $slug = Str::random(rand(6, 18));
             DB::beginTransaction();
             $video = Video::create([
                 'title' => $request->title,
@@ -92,7 +90,6 @@ class VideoService extends Service
             DB::commit();
             return response(['message' => 'success', 'data' => $video], 200);
         } catch (Exception $exception) {
-            dd($exception);
             DB::rollBack();
             Log::error("VideoService: " . $exception);
             return response(['message' => 'there was an error'], 500);

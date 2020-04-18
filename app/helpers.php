@@ -3,6 +3,7 @@
 use App\Exceptions\UserAlreadyExistsException;
 use App\Exceptions\WrongVerifyCodeException;
 use App\User;
+use FFMpeg\Filters\Video\CustomFilter;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 
@@ -61,7 +62,7 @@ if (!function_exists('right_dir_separator')) {
     /**
      * @param $dir
      * @param bool $is_web
-     * @return string|string[]
+     * @return string
      */
     function right_dir_separator($dir, bool $is_web = false)
     {
@@ -98,5 +99,27 @@ if (!function_exists('derandomize_for_id')) {
     function derandomize_for_id(int $id)
     {
         return (int)($id - 33 - 6000 - 200 - 70 - 1) / 1000;
+    }
+}
+
+if (!function_exists('fix_http_slashes')) {
+
+    /**
+     * @param string $str
+     * @return string
+     */
+    function fix_http_slashes(string $str)
+    {
+        return str_replace('http://', "http\\://", $str);
+    }
+}
+
+if (!function_exists('create_watermark')) {
+
+    function create_watermark(string $url)
+    {
+        $url = fix_http_slashes(env('APP_URL')) . $url;
+        return new CustomFilter("drawtext=text='" . $url . "': fontcolor=white@0.3: fontsize=23:
+             box=1: boxcolor=white@0.0001: boxborderw=10: x=10: y=(h - text_h - 10)");
     }
 }
