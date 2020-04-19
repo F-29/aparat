@@ -16,7 +16,7 @@ class ChannelController extends Controller
      */
     public function update(ChannelUpdateRequest $request)
     {
-        return ChannelService::updateChannelInfo($request);
+        return ChannelService::updateChannelInfoService($request);
     }
 
     /**
@@ -25,7 +25,7 @@ class ChannelController extends Controller
      */
     public function uploadBanner(UploadChannelBannerRequest $request)
     {
-        return ChannelService::uploadChannelBanner($request);
+        return ChannelService::uploadChannelBannerService($request);
     }
 
     /**
@@ -34,6 +34,6 @@ class ChannelController extends Controller
      */
     public function updateSocials(UpdateSocialsRequest $request)
     {
-        return ChannelService::updateSocials($request);
+        return ChannelService::updateSocialsService($request);
     }
 }

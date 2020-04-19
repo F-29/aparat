@@ -10,8 +10,8 @@ use App\Http\Requests\Channel\UpdateSocialsRequest;
 use App\Http\Requests\Channel\UploadChannelBannerRequest;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ChannelService extends Service
@@ -21,7 +21,7 @@ class ChannelService extends Service
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|ChannelUpdateRequest
      * @throws AuthorizationException
      */
-    public static function updateChannelInfo(ChannelUpdateRequest $request)
+    public static function updateChannelInfoService(ChannelUpdateRequest $request)
     {
         try {
             DB::beginTransaction();
@@ -58,25 +58,22 @@ class ChannelService extends Service
      * @param UploadChannelBannerRequest $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public static function uploadChannelBanner(UploadChannelBannerRequest $request)
+    public static function uploadChannelBannerService(UploadChannelBannerRequest $request)
     {
-        // TODO: make this 'upload banner like the rest of them' (create a 'disk', ...)
         try {
             $banner = $request->file('banner');
             $channel = auth()->user()->channel;
-            $fileDirectory = env('CHANNEL_DIR') . DIRECTORY_SEPARATOR . md5($channel->user->email);
             $fileName = md5(auth()->id()) . '-' . Str::random(15);
-            $banner->move(public_path($fileDirectory) . DIRECTORY_SEPARATOR, $fileName);
+            Storage::disk('channel')->put($fileName, $banner->get());
 
             if ($channel->banner) {
-                unlink(public_path($channel->banner));
-                File::delete(public_path($channel->banner));
+                Storage::disk('channel')->delete($channel->banner);
             }
-            $channel->banner = $fileDirectory . DIRECTORY_SEPARATOR . $fileName;
+            $channel->banner = Storage::disk('channel')->path($fileName);
             $channel->save();
 
             return response([
-                'banner' => right_dir_separator(url($fileDirectory . DIRECTORY_SEPARATOR . $fileName), true)
+                'banner' => Storage::disk('channel')->url($fileName)
             ], 200);
         } catch (\Exception $exception) {
             Log::error('ChannelService: ' . $exception);
@@ -88,7 +85,7 @@ class ChannelService extends Service
      * @param UpdateSocialsRequest $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public static function updateSocials(UpdateSocialsRequest $request)
+    public static function updateSocialsService(UpdateSocialsRequest $request)
     {
         try {
             $socials = [

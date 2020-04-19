@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
@@ -18,5 +19,8 @@ class DatabaseSeeder extends Seeder
         $this->call(TagTableSeeder::class);
         $this->call(PlaylistTableSeeder::class);
         Schema::enableForeignKeyConstraints();
+
+        Artisan::call('aparat:clear');
+        $this->command->info('Clear all temporary files(videos, category banners, channel banners)');
     }
 }

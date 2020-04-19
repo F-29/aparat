@@ -6,6 +6,7 @@ use App\User;
 use FFMpeg\Filters\Video\CustomFilter;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 if (!function_exists('to_valid_mobile_number')) {
     /** returns a valid phone number that is suitable to be saved in database
@@ -121,5 +122,25 @@ if (!function_exists('create_watermark')) {
         $url = fix_http_slashes(env('APP_URL')) . $url;
         return new CustomFilter("drawtext=text='" . $url . "': fontcolor=white@0.3: fontsize=23:
              box=1: boxcolor=white@0.0001: boxborderw=10: x=10: y=(h - text_h - 10)");
+    }
+}
+
+if (!function_exists('clear_storage')) {
+    /**
+     * @param string $storageName
+     * @return bool
+     */
+    function clear_storage(string $storageName)
+    {
+        try {
+            Storage::disk($storageName)->delete(Storage::disk($storageName)->allFiles());
+            foreach (Storage::disk($storageName)->allDirectories() as $dir) {
+                Storage::disk($storageName)->deleteDirectory($dir);
+            }
+            return true;
+        } catch (Exception $exception) {
+            Log::error("error in clear_storage helper: " . $exception);
+            return false;
+        }
     }
 }
