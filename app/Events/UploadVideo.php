@@ -42,7 +42,7 @@ class UploadVideo
     /**
      * @return CreateVideoRequest
      */
-    public function getRequest()
+    public function getRequest(): CreateVideoRequest
     {
         return $this->request;
     }
@@ -50,12 +50,15 @@ class UploadVideo
     /**
      * @return Video
      */
-    public function getVideo()
+    public function getVideo(): Video
     {
         return $this->video;
     }
 
-    public function getSlug()
+    /**
+     * @return string
+     */
+    public function getSlug(): string
     {
         return $this->slug;
     }

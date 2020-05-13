@@ -5,12 +5,14 @@ namespace App\Http\Services;
 
 
 use App\Events\UploadVideo;
+use App\Http\Requests\SetStateVideoRequest;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Http\Requests\Video\UploadVideoBannerRequest;
 use App\Http\Requests\Video\UploadVideoRequest;
 use App\Playlist;
 use App\Video;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -102,5 +104,14 @@ class VideoService extends Service
             Log::error('VideoService: ' . $exception);
             return response(['message' => 'there was an error'], 500);
         }
+    }
+
+    public static function setState(SetStateVideoRequest $request)
+    {
+        $video = Video::where('slug', $request->slug)->first();
+        if (empty($video)) throw new ModelNotFoundException('Video Not Found');
+        $video->state = $request->validated()['state'];
+        $video->save();
+        return response($video, 202);
     }
 }

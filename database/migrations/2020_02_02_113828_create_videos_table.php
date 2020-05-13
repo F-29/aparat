@@ -18,7 +18,7 @@ class CreateVideosTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('category_id');
-            $table->string('slug', 100);
+            $table->string('slug', 100)->collation('utf8mb4_bin');
             $table->string('title', 255);
             $table->text('info')->nullable();
             $table->integer('duration');
