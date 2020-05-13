@@ -43,16 +43,6 @@ class VideoService extends Service
     public static function CreateUploadedVideoService(CreateVideoRequest $request)
     {
         try {
-//            $uploadedVideoPath = DIRECTORY_SEPARATOR . env('VIDEO_TMP_DIR') . DIRECTORY_SEPARATOR . $request->video_id;
-//            $slug = Str::random(rand(6, 18));
-//            $video = FFMpegFacade::fromDisk('videos')
-//                ->open($uploadedVideoPath);
-//            $filter = create_watermark(auth()->user()->name . '/' . $slug);
-//            $videoFile = $video
-//                ->addFilter($filter)
-//                ->export()
-//                ->toDisk('videos')
-//                ->inFormat(new X264('libmp3lame'));
             $slug = Str::random(rand(6, 18));
 
             DB::beginTransaction();
@@ -63,7 +53,7 @@ class VideoService extends Service
                 'channel_category_id' => $request->channel_category_id,
                 'slug' => '',
                 'info' => $request->info,
-                'duration' => 0,
+                'duration' => 1,
                 'banner' => '',
                 'publish_at' => $request->publish_at,
                 'state' => Video::STATE_PENDING,
@@ -73,10 +63,10 @@ class VideoService extends Service
             $video->banner = $video->slug . '-banner';
             $video->save();
 
-            event(new UploadVideo($video, $request));
+            event(new UploadVideo($video, $request, $slug));
             if ($request->banner) {
                 Storage::disk('videos')->move(DIRECTORY_SEPARATOR . env('VIDEO_TMP_DIR') . DIRECTORY_SEPARATOR
-                    . $request->banner, md5(auth()->id()) . DIRECTORY_SEPARATOR . $video->banner);
+                    . $request->banner, auth()->user()->name . DIRECTORY_SEPARATOR . $video->banner);
             }
 
             if (!empty($request->playlist)) {

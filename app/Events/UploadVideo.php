@@ -21,6 +21,10 @@ class UploadVideo
      * @var CreateVideoRequest
      */
     private $request;
+    /**
+     * @var string
+     */
+    private $slug;
 
     /**
      * UploadVideo constructor.
@@ -28,10 +32,11 @@ class UploadVideo
      * @param CreateVideoRequest $request
      * @param string $slug
      */
-    public function __construct(Video $video, CreateVideoRequest $request)
+    public function __construct(Video $video, CreateVideoRequest $request, string $slug)
     {
         $this->video = $video;
         $this->request = $request;
+        $this->slug = $slug;
     }
 
     /**
@@ -48,6 +53,11 @@ class UploadVideo
     public function getVideo()
     {
         return $this->video;
+    }
+
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
     /**
