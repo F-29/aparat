@@ -71,6 +71,7 @@ class ConvertAndAddWaterMarkToUploadedVideoJob implements ShouldQueue
         Storage::disk('videos')->delete($uploadedVideoPath);
 
         $this->video->duration = $uploadedTempVideo->getDurationInSeconds();
+        $this->video->state = Video::STATE_CONVERTED;
         $this->video->save();
     }
 }

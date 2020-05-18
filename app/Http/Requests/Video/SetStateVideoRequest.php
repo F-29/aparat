@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Video;
 
-use App\Video;
+use App\Rules\Should\ShouldSetStateVideoRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SetStateVideoRequest extends FormRequest
@@ -24,9 +24,8 @@ class SetStateVideoRequest extends FormRequest
      */
     public function rules()
     {
-        $states = Video::STATE_ACCEPTED . ',' . Video::STATE_BLOCKED . ',' . Video::STATE_PENDING;
         return [
-            'state' => 'required|in:' . $states
+            'state' => ['required', new ShouldSetStateVideoRule($this->video)]
         ];
     }
 }

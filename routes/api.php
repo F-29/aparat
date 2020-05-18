@@ -90,7 +90,7 @@ Route::group(["middleware" => "auth:api", 'prefix' => '/video'], function (Route
         'uses' => 'VideoController@create'
     ]);
 
-    $router->put('/{slug}/state', [
+    $router->put('/{video}/state', [
         'as' => 'video.setState',
         'uses' => 'VideoController@setState'
     ]);

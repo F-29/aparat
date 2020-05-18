@@ -42,5 +42,13 @@ class Video extends Model
         'title', 'user_id', 'category_id', 'channel_category_id', 'state',
         'slug', 'info', 'duration', 'banner', 'publish_at', 'commentable'
     ];
+
+    //endregion
+
+    //region Override Model Method(s)
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
     //endregion
 }
