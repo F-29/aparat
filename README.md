@@ -5,7 +5,7 @@
 
 Aparat is a social network for sharing clips, movies, and funny stuff
 
-## it build with:
+## it has:
 - **React.js**
 - **Redux**
 - **Saga**

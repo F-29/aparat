@@ -33,6 +33,22 @@ class User extends Authenticatable
     {
         return static::where('mobile', $username)->orWhere('email', $username)->first();
     }
+
+    /**
+     * @return boolean
+     */
+    public function isAdmin()
+    {
+        return $this->type === User::TYPE_ADMIN;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isBaseUser()
+    {
+        return $this->type === User::TYPE_USER;
+    }
     //endregion
 
     //region Model setters
