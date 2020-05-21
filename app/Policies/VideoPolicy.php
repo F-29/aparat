@@ -12,6 +12,6 @@ class VideoPolicy
 
     public function setState(User $user, Video $video = null)
     {
-        dd($user, $video);
+        return $user->isAdmin();
     }
 }

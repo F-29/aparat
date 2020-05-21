@@ -25,6 +25,6 @@ class ProcessUploadedVideoListener
      */
     public function handle(UploadVideo $event)
     {
-        ConvertAndAddWaterMarkToUploadedVideoJob::dispatch($event->getVideo(), $event->getRequest()->video_id, $event->getSlug());
+        ConvertAndAddWaterMarkToUploadedVideoJob::dispatch($event->getVideo(), $event->getRequest()->video_id, $event->getRequest()->watermark, $event->getSlug());
     }
 }

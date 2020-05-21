@@ -58,7 +58,8 @@ class VideoService extends Service
                 'banner' => '',
                 'publish_at' => $request->publish_at,
                 'state' => Video::STATE_PENDING,
-                'commentable' => $request->commentable
+                'commentable' => $request->commentable,
+                'watermark' => $request->watermark
             ]);
             $video->slug = $slug;
             $video->banner = $video->slug . '-banner';

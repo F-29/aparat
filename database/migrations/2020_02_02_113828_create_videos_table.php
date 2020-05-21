@@ -25,6 +25,7 @@ class CreateVideosTable extends Migration
             $table->string('banner', 255)->nullable();
             $table->unsignedBigInteger('channel_category_id')->nullable();
             $table->boolean('commentable')->default(true);
+            $table->boolean('watermark')->default(true);
             $table->enum('state', Video::STATES)->default(Video::STATE_PENDING);
             $table->timestamp('publish_at')->nullable();
             $table->timestamps();
