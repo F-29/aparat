@@ -62,6 +62,16 @@ class User extends Authenticatable
     //endregion
 
     //region Relations
+
+    /**
+     * oneToMany relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function videos()
+    {
+        return $this->hasMany(Video::class);
+    }
+
     /**
      * manyToOne relation
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -72,7 +82,7 @@ class User extends Authenticatable
     }
 
     /**
-     * oneToMany relationship
+     * oneToMany relation
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function channel()
@@ -81,7 +91,7 @@ class User extends Authenticatable
     }
 
     /**
-     * oneToMany relationship
+     * oneToMany relation
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function categories()

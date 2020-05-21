@@ -17,6 +17,15 @@ class Video extends Model
     //region Relations
 
     /**
+     * manyToOne relation
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * oneToMany relation
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */

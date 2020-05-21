@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Video\CreateVideoRequest;
+use App\Http\Requests\Video\ListVideosRequest;
 use App\Http\Requests\Video\SetStateVideoRequest;
 use App\Http\Requests\Video\UploadVideoBannerRequest;
 use App\Http\Requests\Video\UploadVideoRequest;
@@ -10,6 +11,15 @@ use App\Http\Services\VideoService;
 
 class VideoController extends Controller
 {
+    /**
+     * @param ListVideosRequest $request
+     * @return mixed
+     */
+    public function list(ListVideosRequest $request)
+    {
+        return VideoService::ListUsersAllVideos($request);
+    }
+
     /**
      * @param UploadVideoRequest $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
@@ -37,6 +47,10 @@ class VideoController extends Controller
         return VideoService::UploadVideoBannerService($request);
     }
 
+    /**
+     * @param SetStateVideoRequest $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function setState(SetStateVideoRequest $request)
     {
         return VideoService::setState($request);

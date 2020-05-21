@@ -6,6 +6,7 @@ namespace App\Http\Services;
 
 use App\Events\UploadVideo;
 use App\Http\Requests\Video\CreateVideoRequest;
+use App\Http\Requests\Video\ListVideosRequest;
 use App\Http\Requests\Video\SetStateVideoRequest;
 use App\Http\Requests\Video\UploadVideoBannerRequest;
 use App\Http\Requests\Video\UploadVideoRequest;
@@ -19,6 +20,18 @@ use Illuminate\Support\Str;
 
 class VideoService extends Service
 {
+    /**
+     * @param ListVideosRequest $request
+     * @return mixed
+     */
+    public static function ListUsersAllVideos(ListVideosRequest $request)
+    {
+        return auth()
+            ->user()
+            ->videos()
+            ->paginate();
+    }
+
     /**
      * @param UploadVideoRequest $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
@@ -106,6 +119,10 @@ class VideoService extends Service
         }
     }
 
+    /**
+     * @param SetStateVideoRequest $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public static function setState(SetStateVideoRequest $request)
     {
         $video = $request->video;
