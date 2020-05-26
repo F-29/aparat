@@ -32,11 +32,7 @@ class UserController extends Controller
      */
     public function changeEmailSubmit(ChangeEmailSubmitRequest $request)
     {
-        UserService::ChangeEmailSubmitService($request);
-
-        return response([
-            'message' => 'email changed successfully!'
-        ], 200);
+        return UserService::ChangeEmailSubmitService($request);
     }
 
     /**

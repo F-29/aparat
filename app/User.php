@@ -98,6 +98,23 @@ class User extends Authenticatable
     {
         return $this->hasMany(Category::class);
     }
+
+    /**
+     * manyToMany relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function republishedVideos()
+    {
+        return $this->hasManyThrough(
+            Video::class,
+            RepublishVideo::class,
+            'user_id', // video_republishes.user_id
+            'id', // video.id
+            'id', // user.id
+            'video_id' // video_republishes.video_id
+        );
+    }
+
     //endregion
 
     //region Model config

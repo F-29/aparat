@@ -7,10 +7,12 @@ namespace App\Http\Services;
 use App\Events\UploadVideo;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Http\Requests\Video\ListVideosRequest;
+use App\Http\Requests\Video\RepublishVideoRequest;
 use App\Http\Requests\Video\SetStateVideoRequest;
 use App\Http\Requests\Video\UploadVideoBannerRequest;
 use App\Http\Requests\Video\UploadVideoRequest;
 use App\Playlist;
+use App\RepublishVideo;
 use App\Video;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -119,11 +121,33 @@ class VideoService extends Service
         }
     }
 
+    public static function republishVideoService(RepublishVideoRequest $request)
+    {
+        try {
+            if ($request->video && $request->video->state === Video::STATE_ACCEPTED) {
+                $user = auth()->user();
+                DB::beginTransaction();
+                $videoRepublish = RepublishVideo::create([
+                    'user_id' => $user->id,
+                    'video_id' => $request->video->id
+                ]);
+                DB::commit();
+                return response(['message' => 'success'], 200);
+            } else {
+                return response(['message' => "sorry, video have'nt been accepted yet"], 500);
+            }
+        } catch (Exception $exception) {
+            DB::rollBack();
+            Log::error("error in VideoService.republishVideoService: " . $exception);
+            return response(['message' => ''], 500);
+        }
+    }
+
     /**
      * @param SetStateVideoRequest $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public static function setState(SetStateVideoRequest $request)
+    public static function setStateService(SetStateVideoRequest $request)
     {
         $video = $request->video;
         $video->state = $request->validated()['state'];

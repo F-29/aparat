@@ -42,7 +42,6 @@ class UserService extends Service
         $cacheKey = self::EMAIL_CHANGE_CACHE_KEY . $userID;
         $cache = Cache::get($cacheKey);
         if (empty($cache) || $cache['code'] != $request->code) {
-            dd($cache, $request->all());
             return response([
                 'message' => 'wrong inputs or bad request'
             ], 400);
@@ -52,6 +51,9 @@ class UserService extends Service
         $user->email = $cache['email'];
         $user->save();
         Cache::forget($cacheKey);
+        return response([
+            'message' => 'email changed successfully!'
+        ], 200);
     }
 
     /**
