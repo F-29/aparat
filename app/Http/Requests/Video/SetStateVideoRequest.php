@@ -15,7 +15,7 @@ class SetStateVideoRequest extends FormRequest
      */
     public function authorize()
     {
-        return Gate::allows('change-state', $this->video);
+        return Gate::allows('set-state');
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Policies\VideoPolicy;
-use App\User;
 use App\Video;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -43,12 +42,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     private function registerGates()
     {
-        Gate::before(function (User $user, $ability) {
-            if (!empty($user) && $user->isAdmin()) {
-                return true;
-            }
-            return false;
-        });
-
+        Gate::define('set-state', 'App\Policies\VideoPolicy@setState');
+        Gate::define('republish', 'App\Policies\VideoPolicy@republish');
     }
 }

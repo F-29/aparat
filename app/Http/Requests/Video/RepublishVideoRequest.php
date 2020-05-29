@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Video;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class RepublishVideoRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class RepublishVideoRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Gate::allows('republish', $this->video);
     }
 
     /**

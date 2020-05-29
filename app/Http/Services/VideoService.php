@@ -127,7 +127,7 @@ class VideoService extends Service
             if ($request->video && $request->video->state === Video::STATE_ACCEPTED) {
                 $user = auth()->user();
                 DB::beginTransaction();
-                $videoRepublish = RepublishVideo::create([
+                RepublishVideo::create([
                     'user_id' => $user->id,
                     'video_id' => $request->video->id
                 ]);
