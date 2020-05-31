@@ -75,6 +75,16 @@ Route::group(["middleware" => "auth:api", 'prefix' => '/channel'], function (Rou
  * Video Routes
  */
 Route::group(["middleware" => "auth:api", 'prefix' => '/video'], function (Router $router) {
+    $router->get('/republished', [
+        'as' => 'video.republished',
+        'uses' => 'VideoController@listRepublished'
+    ]);
+
+    $router->get('/my', [
+        'as' => 'video.myVideos',
+        'uses' => 'VideoController@listMyVideos'
+    ]);
+
     $router->get('/', [
         'as' => 'video.list',
         'uses' => 'VideoController@list'

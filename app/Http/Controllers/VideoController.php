@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Video\RepublishVideoRequest;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Http\Requests\Video\ListVideosRequest;
+use App\Http\Requests\Video\RepublishVideoRequest;
 use App\Http\Requests\Video\SetStateVideoRequest;
 use App\Http\Requests\Video\UploadVideoBannerRequest;
 use App\Http\Requests\Video\UploadVideoRequest;
@@ -18,7 +18,25 @@ class VideoController extends Controller
      */
     public function list(ListVideosRequest $request)
     {
-        return VideoService::ListUsersAllVideos($request);
+        return VideoService::ListUsersAllVideosService($request);
+    }
+
+    /**
+     * @param ListVideosRequest $request
+     * @return mixed
+     */
+    public function listRepublished(ListVideosRequest $request)
+    {
+        return VideoService::ListMyRepublishingVideosService($request);
+    }
+
+    /**
+     * @param ListVideosRequest $request
+     * @return mixed
+     */
+    public function listMyVideos(ListVideosRequest $request)
+    {
+        return VideoService::ListMySelfVideosService($request);
     }
 
     /**
@@ -48,6 +66,10 @@ class VideoController extends Controller
         return VideoService::UploadVideoBannerService($request);
     }
 
+    /**
+     * @param RepublishVideoRequest $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function republish(RepublishVideoRequest $request)
     {
         // PANIC: it returns a 404 if slug is wrong

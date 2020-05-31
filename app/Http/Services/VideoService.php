@@ -26,11 +26,35 @@ class VideoService extends Service
      * @param ListVideosRequest $request
      * @return mixed
      */
-    public static function ListUsersAllVideos(ListVideosRequest $request)
+    public static function ListUsersAllVideosService(ListVideosRequest $request)
     {
         return auth()
             ->user()
-            ->videos()
+            ->allVideos()
+            ->paginate();
+    }
+
+    /**
+     * @param ListVideosRequest $request
+     * @return mixed
+     */
+    public static function ListMySelfVideosService(ListVideosRequest $request)
+    {
+        return auth()
+            ->user()
+            ->myVideos()
+            ->paginate();
+    }
+
+    /**
+     * @param ListVideosRequest $request
+     * @return mixed
+     */
+    public static function ListMyRepublishingVideosService(ListVideosRequest $request)
+    {
+        return auth()
+            ->user()
+            ->republishedVideos()
             ->paginate();
     }
 

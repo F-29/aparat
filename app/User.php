@@ -67,7 +67,7 @@ class User extends Authenticatable
      * oneToMany relation
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function videos()
+    public function myVideos()
     {
         return $this->hasMany(Video::class);
     }
@@ -115,6 +115,14 @@ class User extends Authenticatable
         );
     }
 
+    public function allVideos()
+    {
+        return $this->myVideos()
+            ->union(
+                $this->republishedVideos()
+                    ->selectRaw('videos.*')
+            );
+    }
     //endregion
 
     //region Model config
