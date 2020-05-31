@@ -31,4 +31,17 @@ class Playlist extends Model
         'user_id',
     ];
     //endregion
+
+    //region Override Model Method(s)
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $data = parent::toArray();
+        $data['size'] = $this->videos->count();
+
+        return $data;
+    }
+    //endregion
 }
