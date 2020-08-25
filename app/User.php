@@ -115,6 +115,9 @@ class User extends Authenticatable
         );
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\Illuminate\Database\Query\Builder
+     */
     public function allVideos()
     {
         return $this->myVideos()
@@ -122,6 +125,18 @@ class User extends Authenticatable
                 $this->republishedVideos()
                     ->selectRaw('videos.*')
             );
+    }
+
+    public function likedVideos()
+    {
+        return $this->hasManyThrough(
+            Video::class,
+            LikedVideo::class,
+            'user_id', // LikedVideo.user_id
+            'id', // video.id
+            'id', // user.id
+            'video_id' // LikedVideo.video_id
+        );
     }
     //endregion
 

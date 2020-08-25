@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 use Pbmedia\LaravelFFMpeg\FFMpegFacade;
 
-class ConvertAndAddWaterMarkToUploadedVideoJob implements ShouldQueue
+class ConvertAndOrAddWaterMarkToUploadedVideoJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

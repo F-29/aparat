@@ -6,11 +6,13 @@ namespace App\Http\Services;
 
 use App\Events\UploadVideo;
 use App\Http\Requests\Video\CreateVideoRequest;
+use App\Http\Requests\Video\LikeVideoRequest;
 use App\Http\Requests\Video\ListVideosRequest;
 use App\Http\Requests\Video\RepublishVideoRequest;
 use App\Http\Requests\Video\SetStateVideoRequest;
 use App\Http\Requests\Video\UploadVideoBannerRequest;
 use App\Http\Requests\Video\UploadVideoRequest;
+use App\LikedVideo;
 use App\Playlist;
 use App\RepublishVideo;
 use App\Video;
@@ -145,6 +147,10 @@ class VideoService extends Service
         }
     }
 
+    /**
+     * @param RepublishVideoRequest $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public static function republishVideoService(RepublishVideoRequest $request)
     {
         try {
@@ -177,5 +183,34 @@ class VideoService extends Service
         $video->state = $request->validated()['state'];
         $video->save();
         return response($video, 201);
+    }
+
+    public static function likeOrDislikeVideoService(LikeVideoRequest $request)
+    {
+        $user = $request->user();
+        $video = $request->video;
+        $like = $request->like;
+        $fav = $user->likedVideos()->where(['video_id' => $video->id])->first();
+        if (empty($fav)) {
+            if ($like) {
+                LikedVideo::create([
+                    'user_id' => $user->id,
+                    'video_id' => $video->id
+                ]);
+            } else {
+                return response(["message" => "you cannot do that"], 400);
+            }
+        } else {
+            if (!$like) {
+                LikedVideo::where([
+                    'user_id' => $user->id,
+                    'video_id' => $video->id
+                ])->delete();
+            } else {
+                return response(["message" => "you have like this video before"], 400);
+            }
+        }
+
+        return response(["message" => "success"], 200);
     }
 }

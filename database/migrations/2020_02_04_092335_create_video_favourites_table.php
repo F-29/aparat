@@ -29,7 +29,10 @@ class CreateVideoFavouritesTable extends Migration
                 ->on('videos')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+
+            $table->timestamps();
         });
+
     }
 
     /**

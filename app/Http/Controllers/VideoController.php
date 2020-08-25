@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Video\CreateVideoRequest;
+use App\Http\Requests\Video\LikeVideoRequest;
 use App\Http\Requests\Video\ListVideosRequest;
 use App\Http\Requests\Video\RepublishVideoRequest;
 use App\Http\Requests\Video\SetStateVideoRequest;
@@ -83,5 +84,10 @@ class VideoController extends Controller
     public function setState(SetStateVideoRequest $request)
     {
         return VideoService::setStateService($request);
+    }
+
+    public function like(LikeVideoRequest $request)
+    {
+        return VideoService::likeOrDislikeVideoService($request);
     }
 }

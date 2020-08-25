@@ -110,6 +110,11 @@ Route::group(["middleware" => "auth:api", 'prefix' => '/video'], function (Route
         'uses' => 'VideoController@republish'
     ]);
 
+    $router->post('/{video}/like', [
+        'as' => 'video.like',
+        'uses' => 'VideoController@like'
+    ]);
+
     $router->put('/{video}/state', [
         'as' => 'video.setState',
         'uses' => 'VideoController@setState'

@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\UploadVideo;
-use App\Jobs\ConvertAndAddWaterMarkToUploadedVideoJob;
+use App\Jobs\ConvertAndOrAddWaterMarkToUploadedVideoJob;
 
 class ProcessUploadedVideoListener
 {
@@ -25,6 +25,6 @@ class ProcessUploadedVideoListener
      */
     public function handle(UploadVideo $event)
     {
-        ConvertAndAddWaterMarkToUploadedVideoJob::dispatch($event->getVideo(), $event->getRequest()->video_id, $event->getRequest()->watermark, $event->getSlug());
+        ConvertAndOrAddWaterMarkToUploadedVideoJob::dispatch($event->getVideo(), $event->getRequest()->video_id, $event->getRequest()->watermark, $event->getSlug());
     }
 }
